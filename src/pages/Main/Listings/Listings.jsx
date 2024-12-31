@@ -240,7 +240,7 @@ import baseUrl from "../../../api/baseUrl.js";
 import { FaMapLocation } from "react-icons/fa6";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import Loader from "../../../components/Shared/Loader.jsx";
-import PromotedList from "./PromotedList.jsx";
+// import PromotedList from "./PromotedList.jsx";
 
 const Listings = () => {
   const { searchContent } = useContext(AuthContext);

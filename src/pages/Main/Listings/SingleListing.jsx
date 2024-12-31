@@ -16,7 +16,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { FaRegStar } from "react-icons/fa6";
 import baseUrl from "../../../api/baseUrl";
-import PromotedList from "./PromotedLIst";
+// import PromotedList from "./PromotedLIst";
 
 const SingleListing = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -253,7 +253,7 @@ const SingleListing = () => {
                 <h1 className="font-semibold text-gray-500 mb-6">
                   PROMOTED PROPERTIES
                 </h1>
-                <PromotedList />
+                {/* <PromotedList /> */}
               </div>
             </div>
           </div>

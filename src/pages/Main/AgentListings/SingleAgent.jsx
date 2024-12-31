@@ -9,7 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import { AuthContext } from "../../../providers/AuthProvider";
 import baseUrl from "../../../api/baseUrl";
-import PromotedList from "../Listings/PromotedLIst";
+// import PromotedList from "../Listings/PromotedLIst";
 
 const SingleAgent = () => {
   const [showMore, setShowMore] = useState(false);
@@ -626,7 +626,7 @@ const SingleAgent = () => {
                 <h1 className="font-semibold text-gray-500 mb-6">
                   PROMOTED PROPERTIES
                 </h1>
-                <PromotedList />
+                {/* <PromotedList /> */}
               </div>
             </div>
           </div>

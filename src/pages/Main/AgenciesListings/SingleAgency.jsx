@@ -15,7 +15,7 @@ import { Bath, Bed } from "lucide-react";
 import { AiFillStar } from "react-icons/ai";
 import { MdVerified } from "react-icons/md";
 import { BiEnvelope } from "react-icons/bi";
-import PromotedList from "../Listings/PromotedLIst";
+// import PromotedList from "../Listings/PromotedLIst";
 import baseUrl from "../../../api/baseUrl";
 import { AuthContext } from "../../../providers/AuthProvider";
 
@@ -761,7 +761,7 @@ const SingleAgency = () => {
                 <h1 className="font-semibold text-gray-500 mb-6">
                   PROMOTED PROPERTIES
                 </h1>
-                <PromotedList />
+                {/* <PromotedList /> */}
               </div>
             </div>
           </div>
