@@ -225,7 +225,6 @@
 
 // export default Listings;
 
-
 import Container from "../../../components/Shared/Container.jsx";
 import listData from "../../../lib/dummyData.js";
 import Card from "../../../components/Listings/Card/Card.jsx";
@@ -433,6 +432,9 @@ const Listings = () => {
 
           {/* Promotion Section */}
           <div className="col-span-4 h-full pt-6 sticky top-0">
+            <h1 className="font-semibold text-gray-500 mb-6">
+              PROMOTED PROPERTIES
+            </h1>
             {/* First PromotedList */}
             {/* <div className="mb-8">
               <h1 className="font-semibold text-gray-500 mb-6">
@@ -442,9 +444,9 @@ const Listings = () => {
             </div> */}
 
             {/* Second PromotedList */}
-            <div className="sticky top-6">
+            {/* <div className="sticky top-6">
               <PromotedList />
-            </div>
+            </div> */}
           </div>
         </div>
       </Container>
