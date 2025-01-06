@@ -31,7 +31,11 @@ const AgentAgencyListings = () => {
           }`
         );
 
-        setData(res?.data?.data);
+        const filteredData = res?.data?.data.filter(
+          (item) => item.blocked === false
+        );
+
+        setData(filteredData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

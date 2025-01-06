@@ -338,7 +338,12 @@ const Listings = () => {
                 : ""
             }`
         );
-        setProperties(res?.data?.data);
+
+        const filteredData = res?.data?.data.filter(
+          (item) => item.blocked === false && item.approved === true
+        );
+        setProperties(filteredData);
+        // setProperties(res?.data?.data);
       } catch (error) {
         console.error("Error fetching agency data:", error);
       } finally {

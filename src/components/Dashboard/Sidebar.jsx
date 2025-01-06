@@ -18,6 +18,7 @@ import BuyerMenu from "./BuyerMenu";
 import AgentMenu from "./AgentMenu";
 import AdminMenu from "./AdminMenu";
 import SuperAdminMenu from "./SuperAdminMenu";
+import DeveloperMenu from "./DeveloperMenu";
 
 const Sidebar = () => {
   const {
@@ -43,7 +44,7 @@ const Sidebar = () => {
 
   return (
     <div className={sidebarClassNames}>
-      <div className="flex h-[100%] w-full flex-col justify-start">
+      <div className="flex w-full flex-col justify-start">
         <div className="z-50 flex min-h-[56px] w-64 items-center justify-between px-6 pt-3">
           <Logo />
           <button
@@ -53,7 +54,7 @@ const Sidebar = () => {
             <X className="h-5 w-5 text-black transition duration-500 hover:text-gray-500" />
           </button>
         </div>
-        
+
         <div className="flex items-center gap-5 px-8 py-4">
           <div>
             <h3 className="text-md font-semibold">
@@ -67,6 +68,8 @@ const Sidebar = () => {
                     return "ADMIN";
                   case "4":
                     return "SUPER ADMIN";
+                  case "5":
+                    return "DEVELOPER";
                   default:
                     return "UNKNOWN ROLE";
                 }
@@ -78,14 +81,15 @@ const Sidebar = () => {
             </div>
           </div>
         </div>
-  
+
         {/* Navbar links */}
         <nav className="z-10 w-full">{role === "1" && <BuyerMenu />}</nav>
         <nav className="z-10 w-full">{role === "2" && <AgentMenu />}</nav>
         <nav className="z-10 w-full">{role === "3" && <AdminMenu />}</nav>
         <nav className="z-10 w-full">{role === "4" && <SuperAdminMenu />}</nav>
+        <nav className="z-10 w-full">{role === "5" && <DeveloperMenu />}</nav>
       </div>
-  
+
       {/* Logout button placed at the bottom */}
       <div className="mt-auto border-t">
         <span onClick={handleLogout}>

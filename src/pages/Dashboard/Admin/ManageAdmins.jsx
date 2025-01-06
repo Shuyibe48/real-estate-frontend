@@ -16,14 +16,16 @@ import baseUrl from "../../../api/baseUrl";
 import Container from "../../../components/Shared/Container";
 import { Key, ShieldAlert, User } from "lucide-react";
 import {
+  blockAdminFunction,
   blockBuyerFunction,
+  deleteAdminFunction,
   deleteAgentFunction,
   deleteBuyerFunction,
 } from "../../../api/users";
 import { Link } from "react-router-dom";
 import BlockModal from "../../../components/Modal/BlockModal";
 
-const ManageBuyers = () => {
+const ManageAdmins = () => {
   const [entries, setEntries] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedProduct] = useState(null); // For edit modal
@@ -51,7 +53,7 @@ const ManageBuyers = () => {
     queryKey: ["users", entries, currentPage],
     queryFn: async ({ queryKey }) => {
       const [_key, entries, currentPage] = queryKey;
-      const { data } = await baseUrl.get(`buyers/get-buyers`, {
+      const { data } = await baseUrl.get(`admins/get-admins`, {
         params: {
           limit: entries,
           page: currentPage,
@@ -92,7 +94,7 @@ const ManageBuyers = () => {
   };
 
   const handleDeleteUser = (id) => {
-    deleteBuyerFunction(id).then((data) => {
+    deleteAdminFunction(id).then((data) => {
       refetch();
       window.alert("Deleted Successfully!");
     });
@@ -138,7 +140,7 @@ const ManageBuyers = () => {
   };
 
   const handleBlockUser = (id) => {
-    blockBuyerFunction(id).then((data) => {
+    blockAdminFunction(id).then((data) => {
       refetch();
       if (data?.data?.blocked === false) {
         window.alert("Unblocked Successfully!");
@@ -154,15 +156,15 @@ const ManageBuyers = () => {
     <div className="mt-8">
       <Container>
         <div className="mb-4">
-          <h5 className="text-[1.5rem] font-bold">Manage Buyers</h5>
+          <h5 className="text-[1.5rem] font-bold">Manage Moderators</h5>
           <p className="text-[#9bbcd1] text-[1rem]">
-            Welcome to the Manage Buyers Table!
+            Welcome to the Manage Moderators Table!
           </p>
         </div>
         <div className="overflow-x-auto min-w-[300px] flex flex-col justify-between mb-4 mt-6 bg-[#FDF8F4] shadow-lg p-6 rounded-lg">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
             <div className="mb-4">
-              <h5 className="text-xl font-semibold">All Buyers List</h5>
+              <h5 className="text-xl font-semibold">All Moderators List</h5>
               <p className="font-light text-sm">Welcome to the Page!</p>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
@@ -253,10 +255,10 @@ const ManageBuyers = () => {
                       <tr key={user._id}>
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <div className="w-[40px] h-[40px] flex justify-center items-center">
-                            {user?.profileImage ? (
+                            {user?.profileImg ? (
                               <img
                                 className="w-full h-full rounded-full"
-                                src={user.profileImage}
+                                src={user?.profileImg}
                                 alt="profile"
                               />
                             ) : (
@@ -307,7 +309,7 @@ const ManageBuyers = () => {
                             >
                               <DeleteOutlined size={18} />
                             </span>
-                            <Link to={`/dashboard/manage-buyer/${user?._id}`}>
+                            <Link to={`/dashboard/manage-admin/${user?._id}`}>
                               <span className="text-[#99A1B7] hover:text-blue-500 transition duration-150 cursor-pointer">
                                 <CiViewTable size={18} />
                               </span>
@@ -370,4 +372,4 @@ const ManageBuyers = () => {
   );
 };
 
-export default ManageBuyers;
+export default ManageAdmins;

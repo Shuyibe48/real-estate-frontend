@@ -27,7 +27,7 @@ const Login = () => {
 
     try {
       await loginUser(email, password).then((data) => {
-        toast.success("Successfully Login!");
+        window.alert("Successfully Login!");
         setLoading(false);
         navigate(from, { replace: true });
       });

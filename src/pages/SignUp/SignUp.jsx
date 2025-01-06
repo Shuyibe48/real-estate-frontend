@@ -32,14 +32,16 @@ const SignUp = () => {
       url = "/users/create-agent";
     }
 
+    if (formData?.Step === "I'm Developer") {
+      url = "/users/create-developer";
+    }
+
     try {
       const res = await baseUrl.post(url, {
         email: formData.email,
         password: formData.password,
         ...formData, // All steps data
       });
-
-      console.log(res)
 
       window.alert("Successfully Signed Up!");
       setLoading(false);
@@ -88,7 +90,7 @@ const SignUp = () => {
 
   // Option data for each step
   const options = {
-    2: ["Just Explore", "Buy Property", "Sell Property", "I'm Agent"],
+    2: ["Just Explore", "Buy Property", "I'm Developer", "I'm Agent"],
   };
 
   return (

@@ -14,19 +14,34 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import Loader from "../../../components/Shared/Loader";
 import baseUrl from "../../../api/baseUrl";
 import Container from "../../../components/Shared/Container";
-import { User } from "lucide-react";
-import { deleteAgentFunction } from "../../../api/users";
+import {
+  Check,
+  CornerUpLeft,
+  ShieldBan,
+  ShieldCheck,
+  User,
+  X,
+} from "lucide-react";
+import {
+  approvedListFunction,
+  blockListFunction,
+  deleteAgentFunction,
+  rejectListFunction,
+} from "../../../api/users";
 import { Link } from "react-router-dom";
 
-const ManageLists = () => {
+const ModerateLists = () => {
   const [entries, setEntries] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedProduct] = useState(null); // For edit modal
   const [isViewModalOpen, setIsEditModalOpen] = useState(false);
 
   const [deleteUser, setDeleteProductId] = useState(null); // For delete modal
+  const [approved, setApprovedProductId] = useState(null); // For delete modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isApprovedModalOpen, setIsApprovedModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [action, setAction] = useState(false);
 
   const {
     data: responseData = {
@@ -79,16 +94,36 @@ const ManageLists = () => {
     setIsDeleteModalOpen(true);
   };
 
+  // Delete Modal Handler
+  const handleOpenApprovedModal = (id) => {
+    setApprovedProductId(id); // Pass the selected product id
+    setIsApprovedModalOpen(true);
+  };
+
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
   };
 
+  const handleCloseApprovedModal = () => {
+    setIsApprovedModalOpen(false);
+  };
+
   const handleDeleteUser = (id) => {
-    deleteAgentFunction(id).then((data) => {
+    blockListFunction(id).then((data) => {
       refetch();
-      toast.success("Deleted Successfully!");
+      console.log(data);
+      window.alert("Rejected Successfully!");
     });
     handleCloseDeleteModal();
+  };
+
+  const handleApprovedUser = (id) => {
+    approvedListFunction(id).then((data) => {
+      console.log(data);
+      refetch();
+      window.alert("Approved Successfully!");
+    });
+    handleCloseApprovedModal();
   };
 
   const handleEntriesChange = (event) => {
@@ -108,11 +143,12 @@ const ManageLists = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProduct = responseData?.data?.filter((product) =>
-    product?.id?.toLowerCase().includes(searchTerm?.toLowerCase())
+  const filteredProduct = responseData?.data?.filter(
+    (product) =>
+      product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+      product?.approved === true &&
+      product?.blocked === action
   );
-
-  console.log(filteredProduct);
 
   return (
     <div className="mt-8">
@@ -120,7 +156,7 @@ const ManageLists = () => {
         <div className="mb-4">
           <h5 className="text-[1.5rem] font-bold">Manage Property</h5>
           <p className="text-[#9bbcd1] text-[1rem]">
-            Welcome to the Manage Property Table!
+            Welcome to the Moderate Property Table!
           </p>
         </div>
         <div className="overflow-x-auto min-w-[300px] flex flex-col justify-between mb-4 mt-6 bg-[#FDF8F4] shadow-lg p-6 rounded-lg">
@@ -130,6 +166,13 @@ const ManageLists = () => {
               <p className="font-light text-sm">Welcome to the Page!</p>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              <select
+                className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[120px] text-sm"
+                onChange={(e) => setAction(e.target.value === "true")}
+              >
+                <option value="false">Active</option>
+                <option value="true">Inactive</option>
+              </select>
               <select
                 className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[80px] text-sm"
                 value={entries}
@@ -245,30 +288,33 @@ const ManageLists = () => {
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
-                          $ {user?.price}
+                            $ {user?.price}
                           </span>
                         </td>
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
-                            {new Date(
-                              user?.createdAt
-                            ).toLocaleDateString()}
+                            {new Date(user?.createdAt).toLocaleDateString()}
                           </span>
                         </td>
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <div className="flex items-center gap-2">
-                            <Link to={`/list/${user?._id}`}>
+                            <Link to={`/dashboard/update-property/${user?._id}`}>
                               <span className="text-[#99A1B7] hover:text-blue-500 transition duration-150 cursor-pointer">
                                 <CiViewTable size={18} />
                               </span>
                             </Link>
+
                             <span
                               onClick={() => handleOpenDeleteModal(user?._id)} // Pass the ID for deletion
                               className="text-[#99A1B7] hover:text-red-500 transition duration-150 cursor-pointer"
                             >
-                              <DeleteOutlined size={18} />
+                              {action ? (
+                                <ShieldCheck size={18} />
+                              ) : (
+                                <ShieldBan size={18} />
+                              )}
                             </span>
                           </div>
 
@@ -285,6 +331,14 @@ const ManageLists = () => {
                             closeModal={handleCloseDeleteModal}
                             modalHandler={() => handleDeleteUser(deleteUser)} // Pass the ID for delete
                             id={deleteUser}
+                          />
+
+                          {/* Delete Modal */}
+                          <DeleteModal
+                            isOpen={isApprovedModalOpen}
+                            closeModal={handleCloseApprovedModal}
+                            modalHandler={() => handleApprovedUser(approved)} // Pass the ID for delete
+                            id={approved}
                           />
                         </td>
                       </tr>
@@ -320,4 +374,4 @@ const ManageLists = () => {
   );
 };
 
-export default ManageLists;
+export default ModerateLists;

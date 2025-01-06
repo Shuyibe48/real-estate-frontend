@@ -14,9 +14,10 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import Loader from "../../../components/Shared/Loader";
 import baseUrl from "../../../api/baseUrl";
 import Container from "../../../components/Shared/Container";
-import { User } from "lucide-react";
-import { deleteAgentFunction } from "../../../api/users";
+import { Key, ShieldAlert, User } from "lucide-react";
+import { blockAgentFunction, deleteAgentFunction } from "../../../api/users";
 import { Link } from "react-router-dom";
+import BlockModal from "../../../components/Modal/BlockModal";
 
 const ManageAgents = () => {
   const [entries, setEntries] = useState(10);
@@ -25,8 +26,11 @@ const ManageAgents = () => {
   const [isViewModalOpen, setIsEditModalOpen] = useState(false);
 
   const [deleteUser, setDeleteProductId] = useState(null); // For delete modal
+  const [blockUser, setBlockProductId] = useState(null); // For delete modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [blocked, setBlocked] = useState(false);
 
   const {
     data: responseData = {
@@ -79,16 +83,40 @@ const ManageAgents = () => {
     setIsDeleteModalOpen(true);
   };
 
+  // Delete Modal Handler
+  const handleOpenBlockModal = (id) => {
+    setBlockProductId(id); // Pass the selected product id
+    setIsBlockModalOpen(true);
+  };
+
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
+  };
+
+  const handleCloseBlockModal = () => {
+    setIsBlockModalOpen(false);
   };
 
   const handleDeleteUser = (id) => {
     deleteAgentFunction(id).then((data) => {
       refetch();
-      toast.success("Deleted Successfully!");
+
+      window.alert("Deleted Successfully!");
     });
     handleCloseDeleteModal();
+  };
+
+  const handleBlockUser = (id) => {
+    blockAgentFunction(id).then((data) => {
+      refetch();
+      if (data?.data?.blocked === false) {
+        window.alert("Unblocked Successfully!");
+      }
+      if (data?.data?.blocked === true) {
+        window.alert("Blocked Successfully!");
+      }
+    });
+    handleCloseBlockModal();
   };
 
   const handleEntriesChange = (event) => {
@@ -108,8 +136,10 @@ const ManageAgents = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProduct = responseData?.data.filter((product) =>
-    product.id.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProduct = responseData?.data.filter(
+    (product) =>
+      product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+      product?.blocked === blocked
   );
 
   console.log(filteredProduct);
@@ -130,6 +160,13 @@ const ManageAgents = () => {
               <p className="font-light text-sm">Welcome to the Page!</p>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              <select
+                className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[120px] text-sm"
+                onChange={(e) => setBlocked(e.target.value === "true")}
+              >
+                <option value="false">Unblocked</option>
+                <option value="true">Blocked</option>
+              </select>
               <select
                 className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[80px] text-sm"
                 value={entries}
@@ -187,12 +224,6 @@ const ManageAgents = () => {
                     >
                       Email
                     </th>
-                    <th
-                      scope="col"
-                      className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
-                    >
-                      Role
-                    </th>
 
                     <th
                       scope="col"
@@ -245,12 +276,6 @@ const ManageAgents = () => {
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
-                            AGENT
-                          </span>
-                        </td>
-
-                        <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
-                          <span className="font-light text-sm rounded-md">
                             {new Date(
                               user?.userId?.createdAt
                             ).toLocaleDateString()}
@@ -259,17 +284,27 @@ const ManageAgents = () => {
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <div className="flex items-center gap-2">
-                            <Link to={`/agent/${user?._id}`}>
-                              <span className="text-[#99A1B7] hover:text-blue-500 transition duration-150 cursor-pointer">
-                                <CiViewTable size={18} />
-                              </span>
-                            </Link>
+                            <span
+                              onClick={() => handleOpenBlockModal(user._id)} // Pass the ID for deletion
+                              className="text-[#99A1B7] hover:text-red-500 transition duration-150 cursor-pointer"
+                            >
+                              {user?.blocked ? (
+                                <Key size={18} />
+                              ) : (
+                                <ShieldAlert size={18} />
+                              )}
+                            </span>
                             <span
                               onClick={() => handleOpenDeleteModal(user._id)} // Pass the ID for deletion
                               className="text-[#99A1B7] hover:text-red-500 transition duration-150 cursor-pointer"
                             >
                               <DeleteOutlined size={18} />
                             </span>
+                            <Link to={`/manage-agent/${user?._id}`}>
+                              <span className="text-[#99A1B7] hover:text-blue-500 transition duration-150 cursor-pointer">
+                                <CiViewTable size={18} />
+                              </span>
+                            </Link>
                           </div>
 
                           {/* Edit Modal */}
@@ -285,6 +320,14 @@ const ManageAgents = () => {
                             closeModal={handleCloseDeleteModal}
                             modalHandler={() => handleDeleteUser(deleteUser)} // Pass the ID for delete
                             id={deleteUser}
+                          />
+
+                          {/* Delete Modal */}
+                          <BlockModal
+                            isOpen={isBlockModalOpen}
+                            closeModal={handleCloseBlockModal}
+                            modalHandler={() => handleBlockUser(blockUser)} // Pass the ID for delete
+                            id={blockUser}
                           />
                         </td>
                       </tr>

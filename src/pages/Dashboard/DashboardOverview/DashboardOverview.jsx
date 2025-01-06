@@ -9,6 +9,8 @@ import {
   YAxis,
   AreaChart,
   Area,
+  LineChart,
+  Line,
 } from "recharts";
 import { format, parseISO } from "date-fns";
 import Container from "../../../components/Shared/Container";
@@ -36,45 +38,36 @@ const DashboardOverview = () => {
     }));
   };
 
-  // Demo data for buyers, agents, properties, and ad plans
-  const buyers = [
-    { id: 1, name: "John Doe" },
-    { id: 2, name: "Jane Smith" },
-    { id: 3, name: "Alice Johnson" },
+  // Demo data for users, listings, and revenue
+  const users = {
+    owners: 10,
+    agents: 15,
+    buyers: 20,
+  };
+
+  const listings = [
+    { id: 1, status: "active" },
+    { id: 2, status: "inactive" },
+    { id: 3, status: "active" },
+    { id: 4, status: "inactive" },
+    { id: 5, status: "active" },
   ];
 
-  const agents = [
-    { id: 1, name: "Agent A" },
-    { id: 2, name: "Agent B" },
-    { id: 3, name: "Agent C" },
+  const revenueData = [
+    { date: "2024-10-01", totalAmount: 500 },
+    { date: "2024-11-01", totalAmount: 700 },
+    { date: "2024-12-01", totalAmount: 650 },
   ];
 
-  const properties = [
-    { id: 1, status: "sold", soldAt: "2024-10-15" },
-    { id: 2, status: "sold", soldAt: "2024-11-10" },
-    { id: 3, status: "available" },
-    { id: 4, status: "sold", soldAt: "2024-12-01" },
+  const viewData = [
+    { date: "2024-10-01", dailyViews: 200, weeklyViews: 1400, monthlyViews: 6000 },
+    { date: "2024-11-01", dailyViews: 250, weeklyViews: 1750, monthlyViews: 7500 },
+    { date: "2024-12-01", dailyViews: 220, weeklyViews: 1540, monthlyViews: 6800 },
   ];
 
-  const adPlans = [
-    { id: 1, createdAt: "2024-10-01", totalAmount: 200 },
-    { id: 2, createdAt: "2024-11-01", totalAmount: 300 },
-    { id: 3, createdAt: "2024-12-01", totalAmount: 250 },
-  ];
-
-  const totalBuyers = buyers.length;
-  const totalAgents = agents.length;
-  const totalProperties = properties.length;
-  const soldProperties = properties.filter(
-    (prop) => prop.status === "sold"
-  ).length;
-  const remainingProperties = totalProperties - soldProperties;
-
-  const adRevenueByMonth = getMonthlyData(adPlans, "createdAt");
-  const soldPropertiesByMonth = getMonthlyData(
-    properties.filter((p) => p.status === "sold"),
-    "soldAt"
-  );
+  const totalActiveListings = listings.filter((listing) => listing.status === "active").length;
+  const totalInactiveListings = listings.filter((listing) => listing.status === "inactive").length;
+  const revenueByMonth = getMonthlyData(revenueData, "date");
 
   return (
     <div className="mt-6">
@@ -89,33 +82,38 @@ const DashboardOverview = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 rounded-xl shadow-lg">
-              <p className="font-medium">Total Buyers</p>
-              <h3 className="text-4xl font-bold mt-2">{totalBuyers}+</h3>
-              <p className="text-sm">Active buyers on the platform</p>
+              <p className="font-medium">Total Owners</p>
+              <h3 className="text-4xl font-bold mt-2">{users.owners}</h3>
+              <p className="text-sm">Registered property owners</p>
             </div>
             <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white p-6 rounded-xl shadow-lg">
               <p className="font-medium">Total Agents</p>
-              <h3 className="text-4xl font-bold mt-2">{totalAgents}+</h3>
+              <h3 className="text-4xl font-bold mt-2">{users.agents}</h3>
               <p className="text-sm">Agents managing properties</p>
             </div>
             <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-6 rounded-xl shadow-lg">
-              <p className="font-medium">Sold Properties</p>
-              <h3 className="text-4xl font-bold mt-2">{soldProperties}</h3>
-              <p className="text-sm">Properties successfully sold</p>
+              <p className="font-medium">Total Buyers</p>
+              <h3 className="text-4xl font-bold mt-2">{users.buyers}</h3>
+              <p className="text-sm">Active buyers on the platform</p>
             </div>
             <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white p-6 rounded-xl shadow-lg">
-              <p className="font-medium">Remaining Properties</p>
-              <h3 className="text-4xl font-bold mt-2">{remainingProperties}</h3>
-              <p className="text-sm">Properties available for sale</p>
+              <p className="font-medium">Active Listings</p>
+              <h3 className="text-4xl font-bold mt-2">{totalActiveListings}</h3>
+              <p className="text-sm">Currently active listings</p>
+            </div>
+            <div className="bg-gradient-to-r from-indigo-500 to-cyan-500 text-white p-6 rounded-xl shadow-lg">
+              <p className="font-medium">Inactive Listings</p>
+              <h3 className="text-4xl font-bold mt-2">{totalInactiveListings}</h3>
+              <p className="text-sm">Listings not currently active</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Ad Revenue Area chart */}
+            {/* Revenue Card */}
             <div className="bg-[#FDF8F4] shadow-lg rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-4">Monthly Ad Revenue</h3>
+              <h3 className="text-xl font-semibold mb-4">Monthly Revenue</h3>
               <ResponsiveContainer width="100%" height={250}>
-                <AreaChart data={adRevenueByMonth}>
+                <AreaChart data={revenueByMonth}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
@@ -131,18 +129,20 @@ const DashboardOverview = () => {
               </ResponsiveContainer>
             </div>
 
-            {/* Sold Properties Bar Chart */}
+            {/* Popular Listings Card */}
             <div className="bg-[#FDF8F4] shadow-lg rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-4">Monthly Sold Properties</h3>
+              <h3 className="text-xl font-semibold mb-4">Daily/Weekly/Monthly Views</h3>
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={soldPropertiesByMonth}>
+                <LineChart data={viewData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
+                  <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="count" fill="#8884d8" />
-                </BarChart>
+                  <Line type="monotone" dataKey="dailyViews" stroke="#8884d8" />
+                  <Line type="monotone" dataKey="weeklyViews" stroke="#82ca9d" />
+                  <Line type="monotone" dataKey="monthlyViews" stroke="#ffc658" />
+                </LineChart>
               </ResponsiveContainer>
             </div>
           </div>

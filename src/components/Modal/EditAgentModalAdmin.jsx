@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import EditAgentForm from "../Forms/EditAgentForm";
 import EditAgentFormAdmin from "../Forms/EditAgentFormAdmin";
 
-const EditAgentModal = ({ closeModal, isOpen, agentInfo }) => {
+const EditAgentModalAdmin = ({ closeModal, isOpen, agentInfo }) => {
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -63,4 +63,4 @@ const EditAgentModal = ({ closeModal, isOpen, agentInfo }) => {
   );
 };
 
-export default EditAgentModal;
+export default EditAgentModalAdmin;

@@ -14,16 +14,11 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import Loader from "../../../components/Shared/Loader";
 import baseUrl from "../../../api/baseUrl";
 import Container from "../../../components/Shared/Container";
-import { Key, ShieldAlert, User } from "lucide-react";
-import {
-  blockBuyerFunction,
-  deleteAgentFunction,
-  deleteBuyerFunction,
-} from "../../../api/users";
+import { User } from "lucide-react";
+import { deleteAgentFunction } from "../../../api/users";
 import { Link } from "react-router-dom";
-import BlockModal from "../../../components/Modal/BlockModal";
 
-const ManageBuyers = () => {
+const Categorization = () => {
   const [entries, setEntries] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedProduct] = useState(null); // For edit modal
@@ -32,9 +27,6 @@ const ManageBuyers = () => {
   const [deleteUser, setDeleteProductId] = useState(null); // For delete modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
-  const [blockUser, setBlockProductId] = useState(null); // For delete modal
-  const [blocked, setBlocked] = useState(false);
 
   const {
     data: responseData = {
@@ -48,10 +40,10 @@ const ManageBuyers = () => {
     refetch,
     error,
   } = useQuery({
-    queryKey: ["users", entries, currentPage],
+    queryKey: ["properties/get-properties", entries, currentPage],
     queryFn: async ({ queryKey }) => {
       const [_key, entries, currentPage] = queryKey;
-      const { data } = await baseUrl.get(`buyers/get-buyers`, {
+      const { data } = await baseUrl.get(`properties/get-properties`, {
         params: {
           limit: entries,
           page: currentPage,
@@ -92,9 +84,9 @@ const ManageBuyers = () => {
   };
 
   const handleDeleteUser = (id) => {
-    deleteBuyerFunction(id).then((data) => {
+    deleteAgentFunction(id).then((data) => {
       refetch();
-      window.alert("Deleted Successfully!");
+      toast.success("Deleted Successfully!");
     });
     handleCloseDeleteModal();
   };
@@ -116,64 +108,28 @@ const ManageBuyers = () => {
     setSearchTerm(event.target.value);
   };
 
-  // const filteredProduct = responseData?.data.filter((product) =>
-  //   product?.id?.toLowerCase().includes(searchTerm?.toLowerCase())
-  // );
-
-  const filteredProduct = responseData?.data.filter(
-    (product) =>
-      product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
-      product?.blocked === blocked
+  const filteredProduct = responseData?.data?.filter((product) =>
+    product?.id?.toLowerCase().includes(searchTerm?.toLowerCase())
   );
 
-
-  const handleCloseBlockModal = () => {
-    setIsBlockModalOpen(false);
-  };
-
-  // Delete Modal Handler
-  const handleOpenBlockModal = (id) => {
-    setBlockProductId(id); // Pass the selected product id
-    setIsBlockModalOpen(true);
-  };
-
-  const handleBlockUser = (id) => {
-    blockBuyerFunction(id).then((data) => {
-      refetch();
-      if (data?.data?.blocked === false) {
-        window.alert("Unblocked Successfully!");
-      }
-      if (data?.data?.blocked === true) {
-        window.alert("Blocked Successfully!");
-      }
-    });
-    handleCloseBlockModal();
-  };
+  console.log(filteredProduct);
 
   return (
     <div className="mt-8">
       <Container>
         <div className="mb-4">
-          <h5 className="text-[1.5rem] font-bold">Manage Buyers</h5>
+          <h5 className="text-[1.5rem] font-bold">Manage Property</h5>
           <p className="text-[#9bbcd1] text-[1rem]">
-            Welcome to the Manage Buyers Table!
+            Welcome to the Manage Property Table!
           </p>
         </div>
         <div className="overflow-x-auto min-w-[300px] flex flex-col justify-between mb-4 mt-6 bg-[#FDF8F4] shadow-lg p-6 rounded-lg">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
             <div className="mb-4">
-              <h5 className="text-xl font-semibold">All Buyers List</h5>
+              <h5 className="text-xl font-semibold">All Properties List</h5>
               <p className="font-light text-sm">Welcome to the Page!</p>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-              <select
-                className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[120px] text-sm"
-                onChange={(e) => setBlocked(e.target.value === "true")}
-              >
-                <option value="false">Unblocked</option>
-                <option value="true">Blocked</option>
-              </select>
-
               <select
                 className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[80px] text-sm"
                 value={entries}
@@ -203,7 +159,7 @@ const ManageBuyers = () => {
           <div className="overflow-x-auto">
             {filteredProduct &&
             Array.isArray(filteredProduct) &&
-            filteredProduct.length > 0 ? (
+            filteredProduct?.length > 0 ? (
               <table className="min-w-[700px] lg:min-w-full leading-normal">
                 <thead>
                   <tr>
@@ -217,26 +173,32 @@ const ManageBuyers = () => {
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
                     >
-                      Name
+                      Title
                     </th>
                     <th
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
                     >
-                      User ID
+                      Property ID
                     </th>
                     <th
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
                     >
-                      Email
+                      Type
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
+                    >
+                      Price
                     </th>
 
                     <th
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
                     >
-                      Created At
+                      Uploaded At
                     </th>
 
                     <th
@@ -249,14 +211,14 @@ const ManageBuyers = () => {
                 </thead>
                 <tbody>
                   {filteredProduct &&
-                    filteredProduct.map((user) => (
-                      <tr key={user._id}>
+                    filteredProduct?.map((user) => (
+                      <tr key={user?._id}>
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <div className="w-[40px] h-[40px] flex justify-center items-center">
-                            {user?.profileImage ? (
+                            {user?.images[0] ? (
                               <img
                                 className="w-full h-full rounded-full"
-                                src={user.profileImage}
+                                src={user?.images[0]}
                                 alt="profile"
                               />
                             ) : (
@@ -267,7 +229,7 @@ const ManageBuyers = () => {
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
-                            {user?.fullName}
+                            {user?.title}
                           </span>
                         </td>
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
@@ -277,41 +239,37 @@ const ManageBuyers = () => {
                         </td>
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
-                            {user?.email}
+                            {user?.type}
+                          </span>
+                        </td>
+
+                        <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
+                          <span className="font-light text-sm rounded-md">
+                          $ {user?.price}
                           </span>
                         </td>
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
                             {new Date(
-                              user?.userId?.createdAt
+                              user?.createdAt
                             ).toLocaleDateString()}
                           </span>
                         </td>
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <div className="flex items-center gap-2">
-                            <span
-                              onClick={() => handleOpenBlockModal(user._id)} // Pass the ID for deletion
-                              className="text-[#99A1B7] hover:text-red-500 transition duration-150 cursor-pointer"
-                            >
-                              {user?.blocked ? (
-                                <Key size={18} />
-                              ) : (
-                                <ShieldAlert size={18} />
-                              )}
-                            </span>
-                            <span
-                              onClick={() => handleOpenDeleteModal(user._id)} // Pass the ID for deletion
-                              className="text-[#99A1B7] hover:text-red-500 transition duration-150 cursor-pointer"
-                            >
-                              <DeleteOutlined size={18} />
-                            </span>
-                            <Link to={`/dashboard/manage-buyer/${user?._id}`}>
+                            <Link to={`/list/${user?._id}`}>
                               <span className="text-[#99A1B7] hover:text-blue-500 transition duration-150 cursor-pointer">
                                 <CiViewTable size={18} />
                               </span>
                             </Link>
+                            <span
+                              onClick={() => handleOpenDeleteModal(user?._id)} // Pass the ID for deletion
+                              className="text-[#99A1B7] hover:text-red-500 transition duration-150 cursor-pointer"
+                            >
+                              <DeleteOutlined size={18} />
+                            </span>
                           </div>
 
                           {/* Edit Modal */}
@@ -327,14 +285,6 @@ const ManageBuyers = () => {
                             closeModal={handleCloseDeleteModal}
                             modalHandler={() => handleDeleteUser(deleteUser)} // Pass the ID for delete
                             id={deleteUser}
-                          />
-
-                          {/* Delete Modal */}
-                          <BlockModal
-                            isOpen={isBlockModalOpen}
-                            closeModal={handleCloseBlockModal}
-                            modalHandler={() => handleBlockUser(blockUser)} // Pass the ID for delete
-                            id={blockUser}
                           />
                         </td>
                       </tr>
@@ -370,4 +320,4 @@ const ManageBuyers = () => {
   );
 };
 
-export default ManageBuyers;
+export default Categorization;

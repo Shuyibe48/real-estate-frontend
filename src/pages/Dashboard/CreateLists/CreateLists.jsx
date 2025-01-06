@@ -199,6 +199,7 @@ const CreateLists = () => {
           </div>
           <div className="w-full min-h-screen flex flex-col justify-center items-center">
             <form onSubmit={handleSubmit} className="w-full">
+              
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {/* Left column */}
                 <div className="space-y-2">
@@ -463,6 +464,10 @@ const CreateLists = () => {
 
                 {/* Right column */}
                 <div className="flex flex-col gap-2">
+
+
+
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {selectedType === "Buy" && (
                       <div className="space-y-1">
@@ -494,6 +499,8 @@ const CreateLists = () => {
                         required
                       />
                     </div>
+
+
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -660,6 +667,10 @@ const CreateLists = () => {
                     />
                   </div>
 
+
+
+
+
                   <div className="space-y-1">
                     <label
                       htmlFor="description"
@@ -724,6 +735,11 @@ const CreateLists = () => {
                     />
                   </div>
 
+
+
+
+
+
                   {/* Sale Method */}
                   {selectedType === "buy" && (
                     <div className="mb-6">
@@ -749,6 +765,9 @@ const CreateLists = () => {
                     </div>
                   )}
 
+
+
+
                   <button
                     type="submit"
                     disabled={loading}
@@ -760,6 +779,8 @@ const CreateLists = () => {
                       "Create Property"
                     )}
                   </button>
+
+
                 </div>
               </div>
             </form>

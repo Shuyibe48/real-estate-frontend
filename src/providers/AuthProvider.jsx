@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
           Authorization: token,
         },
       });
-
+      
       const currentUser = res?.data?.data;
 
       setUser(currentUser);

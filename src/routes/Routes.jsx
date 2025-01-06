@@ -15,7 +15,7 @@ import Portfolio from "../pages/Dashboard/Agent/Portfolio/Portfolio";
 import Agency from "../pages/Dashboard/Agent/Agency/Agency";
 import Team from "../pages/Dashboard/Agent/Agency/Team/Team";
 import SinglePortfolio from "../pages/Dashboard/Agent/Portfolio/SinglePortfolio";
-import { getAgent, getSingleAgency, getSingleAgent, getSingleList } from "../api/utils";
+import { getAgent, getSingleAdmin, getSingleAgency, getSingleAgent, getSingleBuyer, getSingleList, getSingleProperty } from "../api/utils";
 import AgentListings from "../pages/Main/AgentListings/AgentListings";
 import AgenciesListings from "../pages/Main/AgenciesListings/AgenciesListings";
 import FavoriteProperties from "../pages/Dashboard/Buyer/FavoriteProperties";
@@ -35,6 +35,17 @@ import GetPlan from "../pages/Dashboard/Agency/GetPlan";
 import Plan from "../pages/Dashboard/Admin/Plan";
 import Promotion from "../pages/Dashboard/Agency/Promotion";
 import AgencyLists from "../pages/Dashboard/Agent/Agency/AgencyLists";
+import EditAgent from "../pages/Dashboard/Admin/EditAgent";
+import EditBuyer from "../pages/Dashboard/Admin/EditBuyer";
+import DeveloperProfile from "../pages/Dashboard/Developer/DeveloperProfile";
+import ManageDeveloper from "../pages/Dashboard/Admin/ManageDeveloper";
+import CreateRoles from "../pages/Dashboard/Admin/CreateRoles";
+import ManageAdmins from "../pages/Dashboard/Admin/ManageAdmins";
+import EditAdmin from "../pages/Dashboard/Admin/EditAdmin";
+import RolePermissionManager from "../pages/Dashboard/Admin/RolePermissionManager";
+import ModerateLists from "../pages/Dashboard/Admin/ModerateLists";
+import Categorization from "../pages/Dashboard/Admin/Categorization";
+import EditPropertyForm from "../pages/Dashboard/Admin/EditPropertyForm";
 
 export const router = createBrowserRouter([
   {
@@ -68,6 +79,11 @@ export const router = createBrowserRouter([
         loader: ({ params }) => getSingleAgent(params.id),
       },
       {
+        path: "/manage-agent/:id",
+        element: <EditAgent />,
+        loader: ({ params }) => getSingleAgent(params.id),
+      },
+      {
         path: "/agency/:id",
         element: <SingleAgency />,
         loader: ({ params }) => getSingleAgency(params.id),
@@ -97,6 +113,25 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/profile",
         element: <Profile />,
+      },
+      {
+        path: "/dashboard/developer-profile/:id",
+        element: <DeveloperProfile />,
+      },
+      {
+        path: "/dashboard/manage-buyer/:id",
+        element: <EditBuyer />,
+        loader: ({ params }) => getSingleBuyer(params.id),
+      },
+      {
+        path: "/dashboard/manage-admin/:id",
+        element: <EditAdmin />,
+        loader: ({ params }) => getSingleAdmin(params.id),
+      },
+      {
+        path: "/dashboard/update-property/:id",
+        element: <EditPropertyForm />,
+        loader: ({ params }) => getSingleProperty(params.id),
       },
       {
         path: "/dashboard/portfolio",
@@ -144,6 +179,22 @@ export const router = createBrowserRouter([
         element: <ManageBuyers />,
       },
       {
+        path: "/dashboard/manage-moderators",
+        element: <ManageAdmins />,
+      },
+      {
+        path: "/dashboard/create-roles",
+        element: <CreateRoles />,
+      },
+      {
+        path: "/dashboard/roles-permission",
+        element: <RolePermissionManager />,
+      },
+      {
+        path: "/dashboard/manage-developers",
+        element: <ManageDeveloper />,
+      },
+      {
         path: "/dashboard/manage-agents",
         element: <ManageAgents />,
       },
@@ -154,6 +205,14 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/manage-lists",
         element: <ManageLists />,
+      },
+      {
+        path: "/dashboard/moderate-lists",
+        element: <ModerateLists />,
+      },
+      {
+        path: "/dashboard/categorization-lists",
+        element: <Categorization />,
       },
       {
         path: "/dashboard/manage-orders",
