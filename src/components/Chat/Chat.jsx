@@ -84,11 +84,17 @@ const Chat = () => {
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-gray-800">
-                    {chat.participants
-                      .find((p) => p._id !== user?.userId?._id)?.email || ""}
+                    {chat.participants.find((p) => p._id !== user?.userId?._id)
+                      ?.email || ""}
                   </p>
-                  <p className="text-sm text-gray-500 truncate">
-                    {chat.messages?.[chat.messages.length - 1]?.text || ""}
+                  <p className="text-sm text-gray-500">
+                    {chat.messages?.[chat.messages.length - 1]?.text
+                      ? chat.messages[chat.messages.length - 1].text.length > 30
+                        ? chat.messages[
+                            chat.messages.length - 1
+                          ].text.substring(0, 30) + "..."
+                        : chat.messages[chat.messages.length - 1].text
+                      : ""}
                   </p>
                 </div>
                 <span className="text-xs text-gray-400">

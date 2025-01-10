@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import { BiLeftArrow, BiRightArrow, BiCamera, BiVideo } from "react-icons/bi";
 
-const Slider = ({ images }) => {
+const ImageSlider = ({ images }) => {
   const [imageIndex, setImageIndex] = useState(null);
 
   const totalImages = images?.length || 0;
@@ -72,7 +72,7 @@ const Slider = ({ images }) => {
 
       {/* Thumbnail Section */}
       <div className="hidden md:flex flex-[2] flex-col justify-between gap-2">
-        {images.slice(1, 3).map((image, index) => (
+        {images?.slice(1, 3).map((image, index) => (
           <img
             onClick={() => setImageIndex(index + 1)}
             key={index}
@@ -99,4 +99,4 @@ const Slider = ({ images }) => {
   );
 };
 
-export default Slider;
+export default ImageSlider;

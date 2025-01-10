@@ -33,11 +33,11 @@ const DeveloperMenu = () => {
         label="Projects"
         href={`/dashboard/projects/${user?._id}`}
       />
-      <DashboardSidebarMenu
+      {/* <DashboardSidebarMenu
         icon={BookOpenCheck}
         label="Enquiries"
         href="/dashboard/enquiries"
-      />
+      /> */}
       {/* <DashboardSidebarMenu
           icon={Search}
           label="Searches & Alerts"

@@ -1,5 +1,4 @@
 import { Bath, Bed, Car, HomeIcon, House, Square } from "lucide-react";
-import Slider from "../../../components/Listings/Slider/Slider";
 import Container from "../../../components/Shared/Container";
 import { Link, useLoaderData } from "react-router-dom";
 import { MdEventAvailable, MdVerified } from "react-icons/md";
@@ -19,6 +18,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { FaRegStar } from "react-icons/fa6";
 import baseUrl from "../../../api/baseUrl";
+import ImageSlider from "../../../components/Listings/Slider/ImageSlider";
 // import PromotedList from "./PromotedLIst";
 
 const SingleListing = () => {
@@ -152,7 +152,7 @@ const SingleListing = () => {
       <Container>
         {/* Image Slider */}
         <div>
-          <Slider images={property?.images} />
+          <ImageSlider images={property?.images} />
         </div>
 
         {/* Main Content */}

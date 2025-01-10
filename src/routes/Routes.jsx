@@ -54,6 +54,7 @@ import PlatformConfiguration from "../pages/Dashboard/Admin/PlatformConfiguratio
 import Security from "../pages/Dashboard/Admin/Security";
 import CreateProject from "../pages/Dashboard/Developer/CreateProject";
 import Projects from "../pages/Dashboard/Developer/Projects";
+import SingleProject from "../pages/Dashboard/Developer/SingleProject";
 
 export const router = createBrowserRouter([
   {
@@ -137,6 +138,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/projects/:id",
         element: <Projects />,
+      },
+      {
+        path: "/dashboard/single-project/:id",
+        element: <SingleProject />,
       },
       {
         path: "/dashboard/manage-buyer/:id",
