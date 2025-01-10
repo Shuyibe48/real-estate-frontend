@@ -5,6 +5,8 @@ import EmptyState from "../../../components/Shared/EmptyState";
 import Loader from "../../../components/Shared/Loader";
 import Container from "../../../components/Shared/Container";
 import baseUrl from "../../../api/baseUrl";
+import { Link } from "react-router-dom";
+import { History } from "lucide-react";
 
 const ManageOrders = () => {
   // States for managing entries, pagination, and search
@@ -86,7 +88,7 @@ const ManageOrders = () => {
           <div className="overflow-x-auto min-w-[300px] flex flex-col justify-between mb-4 mt-6 bg-[#FDF8F4] shadow-lg p-6 rounded-lg">
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
               <div className="mb-4">
-                <h5 className="text-xl font-semibold">My Payments List</h5>
+                <h5 className="text-xl font-semibold">All Payments List</h5>
                 <p className="font-light text-sm">Welcome to the Page!</p>
               </div>
 
@@ -151,6 +153,9 @@ const ManageOrders = () => {
                       <th className="py-3 bg-[#FDF8F4] border-r border-t border-b px-2 border-gray-200 text-[#99A1B7] text-left text-sm uppercase font-semibold">
                         Created At
                       </th>
+                      <th className="py-3 bg-[#FDF8F4] border-r border-t border-b px-2 border-gray-200 text-[#99A1B7] text-left text-sm uppercase font-semibold">
+                        History
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -169,7 +174,7 @@ const ManageOrders = () => {
                           {item.plan.name}
                         </td>
                         <td className="py-2 border-r border-t border-b px-2 border-gray-200 bg-[#FDF8F4] text-sm">
-                        {formatDuration(item.plan.duration)}
+                          {formatDuration(item.plan.duration)}
                         </td>
                         <td className="py-2 border-r border-t border-b px-2 border-gray-200 bg-[#FDF8F4] text-sm">
                           ${item.plan.price}
@@ -200,6 +205,11 @@ const ManageOrders = () => {
 
                         <td className="py-2 border-t border-b ps-2 border-gray-200 bg-[#FDF8F4] text-sm">
                           {new Date(item.updatedAt).toLocaleDateString()}
+                        </td>
+                        <td className="py-2 border-r border-t border-b px-2 border-gray-200 bg-[#FDF8F4] text-sm">
+                          <Link to={`/dashboard/payment/${item?.agency?._id}`}>
+                            <History className="h-4 w-4"/>
+                          </Link>
                         </td>
                       </tr>
                     ))}

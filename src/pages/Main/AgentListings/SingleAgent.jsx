@@ -1,18 +1,18 @@
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import Container from "../../../components/Shared/Container";
-import { Bath, Bed, CookingPotIcon } from "lucide-react";
+import { Bath, Bed, CircleAlert, CookingPotIcon } from "lucide-react";
 import { BiEnvelope } from "react-icons/bi";
 import { AiFillStar } from "react-icons/ai";
 import { MdVerified } from "react-icons/md";
 import ContactEnvelop from "../../../components/ContactEnvelop/ContactEnvelop";
 import { useContext, useEffect, useState } from "react";
-import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import { FaEnvelope, FaPhoneAlt, FaStar } from "react-icons/fa";
 import { AuthContext } from "../../../providers/AuthProvider";
 import baseUrl from "../../../api/baseUrl";
 // import PromotedList from "../Listings/PromotedLIst";
+import { formatDistanceToNow } from "date-fns";
 
 const SingleAgent = () => {
-  const [showMore, setShowMore] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const agent = useLoaderData();
   const navigate = useNavigate();
@@ -102,10 +102,162 @@ const SingleAgent = () => {
 
   const displayedProperties = filteredProperties.slice(0, visibleCount);
 
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState("");
+  const [showMore, setShowMore] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [expandedReviews, setExpandedReviews] = useState({});
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [complain, setComplain] = useState("");
+
+  const openReportModal = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+    setComplain(""); // Clear the complain text on modal close
+  };
+
+  const handleComplainChange = (e) => {
+    setComplain(e.target.value);
+  };
+
+  const handleReportSubmit = async () => {
+    try {
+      const res = await baseUrl.post(`/complains/create-complains/${agent?._id}`, {
+        complain: {
+          userId: user?._id,
+          id: user?.id,
+          toId: agent?.id,
+          name: user?.fullName,
+          complain: complain,
+        },
+      });
+
+      console.log(res);
+
+      if (res.status === 200 || res.status === 201) {
+        window.alert("Complain submitted successfully!");
+        closeReportModal();
+      } else {
+        throw new Error("Failed to submit complain");
+      }
+    } catch (error) {
+      console.error("Error submitting complain:", error);
+      window.alert(
+        "An error occurred while submitting your complain. Please try again."
+      );
+    }
+  };
+
+  const handleReviewSubmit = async () => {
+    try {
+      const res = await baseUrl.post(
+        `/reviews/create-reviews-agent/${agent?._id}`,
+        {
+          reviews: {
+            userId: user?._id,
+            id: user?.id,
+            toId: agent?.id,
+            name: user?.fullName,
+            rating: rating,
+            reviews: review,
+          },
+        }
+      );
+
+      console.log(res);
+
+      if (res.status === 200 || res.status === 201) {
+        window.alert("Review submitted successfully!");
+      } else {
+        throw new Error("Failed to submit review");
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      window.alert(
+        "An error occurred while submitting your review. Please try again."
+      );
+    }
+  };
+
+  const filteredProduct = agent?.reviews
+    ?.filter(
+      (product) => product?.approved === true && product?.blocked === false
+    )
+    ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sorting by createdAt
+
+  useEffect(() => {
+    if (filteredProduct.length > 0) {
+      const total = agent.reviews.length;
+      const sumRating = agent.reviews.reduce(
+        (sum, review) => sum + review.rating,
+        0
+      );
+      const avgRating = sumRating / total;
+
+      setTotalReviews(total);
+      setAverageRating(avgRating.toFixed(1)); // Limiting to one decimal point
+    }
+  }, [agent]);
+
+  const reviewsToShow = showAllReviews
+    ? filteredProduct
+    : filteredProduct.slice(0, 5);
+
+  const toggleShowReviews = () => {
+    setShowAllReviews(!showAllReviews);
+  };
+
+  const toggleReviewText = (reviewId) => {
+    setExpandedReviews((prevState) => ({
+      ...prevState,
+      [reviewId]: !prevState[reviewId],
+    }));
+  };
+
+  const myReview = filteredProduct?.filter(
+    (product) => product?.id === user?.id
+  );
+
   return (
     <div className="bg-[#F6F5F7]">
-      <nav className="bg-[#37424B] font-semibold text-white py-4 text-center">
-        {agent?.myAgency?.agent?.name}
+      <nav className="bg-[#37424B] font-semibold text-white py-4 text-center flex justify-between items-center px-4">
+        <span>{agent?.myAgency?.agent?.name}</span>
+        <span className="cursor-pointer" onClick={openReportModal}>
+          <CircleAlert className="h-4 w-4 text-gray-300" />
+        </span>
+
+        {isReportModalOpen && (
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-md max-w-md w-full">
+              <h2 className="text-lg font-semibold mb-4">Report Form</h2>
+              <textarea
+                value={complain}
+                onChange={handleComplainChange}
+                className="w-full text-black h-32 border border-gray-300 rounded-md p-2"
+                placeholder="Write your complain here..."
+              />
+              <div className="mt-4 flex justify-end">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                  onClick={handleReportSubmit}
+                >
+                  Submit
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded-md"
+                  onClick={closeReportModal}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
       <div>
         <img
@@ -127,22 +279,22 @@ const SingleAgent = () => {
             <div>
               <h1 className="font-semibold text-xl">{agent?.fullName}</h1>
             </div>
-            <p>
-              Sales Consultant at{" "}
-              <Link className="underline">{agent?.myAgency?.agent?.name}</Link>{" "}
-            </p>
-            <div className="flex items-center gap-2">
-              <p>8 years experience</p>
-              <p>5.0 (59 reviews)</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                Great communicator (44)
+            {agent?.myAgency?.agent?.name && (
+              <p>
+                Sales Consultant at{" "}
+                <Link className="underline">
+                  {agent?.myAgency?.agent?.name}
+                </Link>{" "}
               </p>
-              <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">Genuine (42)</p>
-              <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                Professional (40)
-              </p>
+            )}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center text-yellow-500">
+                <AiFillStar />
+                <span className="font-medium">{averageRating}.0</span>
+                <span className="text-gray-600 ml-1">
+                  ({totalReviews} reviews)
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -361,128 +513,13 @@ const SingleAgent = () => {
                   {showMore ? "Show Less" : "Show More"}
                 </button>
               </div>
-              <div className="flex justify-center">
+              <div id="enquiry" className="flex justify-center">
                 <button className="flex mt-2 w-4/5 justify-center items-center gap-1 bg-rose-500 hover:bg-rose-700 text-white px-6 py-2 rounded-md transition duration-500 font-semibold">
                   <span>
                     <BiEnvelope />
                   </span>
                   Request a free appraisal
                 </button>
-              </div>
-            </div>
-
-            <div className="space-y-2 my-4 bg-white p-4 rounded-md shadow-md">
-              <div>
-                <h1 className="font-semibold text-lg">
-                  {agent?.name?.firstName}'s reviews
-                </h1>
-                <p>
-                  Read the latest client reviews of Doug Webber, real estate
-                  agent at Pat O'Driscoll Real Estate - Rockhampton.
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div>
-                  <img
-                    className="h-[100px] w-[100px] rounded-full"
-                    src={agent?.profileImage}
-                    alt=""
-                  />
-                </div>
-                <div>
-                  <p>
-                    <b>5.0</b> (59 reviews)
-                  </p>
-                  <p>
-                    Partnered with {agent?.name?.firstName} before?{" "}
-                    <span className="font-semibold text-[#005180]">
-                      Leave a review
-                    </span>
-                  </p>
-                </div>
-              </div>
-              <div>
-                <p className="font-semibold mb-1">
-                  Clients say {agent?.name?.firstName} is...
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Great communicator (44)
-                  </p>
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Genuine (42)
-                  </p>
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Professional (40)
-                  </p>
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Trustworthy (40)
-                  </p>
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Reliable (26)
-                  </p>
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Got a great price (22)
-                  </p>
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Great negotiator (18)
-                  </p>
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Punctual (14)
-                  </p>
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Suburb specialist (13)
-                  </p>
-                  <p className="bg-[#E5E3E8] px-2 py-1 rounded-md">
-                    Great marketer (7)
-                  </p>
-                </div>
-              </div>
-
-              <div className="bg-[#F6F5F7] p-4 rounded-md">
-                <div className="flex justify-between items-start">
-                  <div className="flex-[2]">
-                    <div className="flex items-center mb-2">
-                      <div className="flex text-yellow-500">
-                        {/* স্টার রেটিং */}
-                        {[...Array(5)].map((_, index) => (
-                          <AiFillStar key={index} />
-                        ))}
-                      </div>
-                      <p className="ml-2 text-gray-700 font-semibold text-lg">
-                        5.0
-                      </p>
-                    </div>
-                    <p className="font-semibold text-gray-800 text-base">
-                      Seller of house in West Rockhampton, QLD
-                    </p>
-                    <span className="text-xs text-gray-500">27 days ago</span>
-                    <div className="py-4 text-gray-800 text-sm">
-                      <p>
-                        {showMore
-                          ? `Doug was great! Highly recommend him for house sale.`
-                          : `Doug was great!`}
-                      </p>
-                      <button
-                        onClick={handleToggle}
-                        className="text-[#005180] font-semibold hover:underline mt-2"
-                      >
-                        {showMore ? "Show Less" : "Show More"}
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 text-gray-500">
-                    <MdVerified className="text-gray-600" />{" "}
-                    {/* ভেরিফাইড আইকন */}
-                    <p className="text-sm font-semibold">Verified review</p>
-                  </div>
-                </div>
-              </div>
-
-              <div id="enquiry" className="flex justify-center">
-                <span className="mt-4 px-4 py-2 rounded-md border hover:bg-rose-50 transition duration-500 cursor-pointer font-semibold">
-                  Show more reviews
-                </span>
               </div>
             </div>
 
@@ -507,8 +544,10 @@ const SingleAgent = () => {
                       </h2>
                       <div className="flex items-center text-yellow-500">
                         <AiFillStar />
-                        <span className="font-medium">5.0</span>
-                        <span className="text-gray-600 ml-1">(59 reviews)</span>
+                        <span className="font-medium">{averageRating}.0</span>
+                        <span className="text-gray-600 ml-1">
+                          ({totalReviews} reviews)
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -581,17 +620,108 @@ const SingleAgent = () => {
               </div>
             </div>
 
-            <div className="my-4">
-              <p>
-                ^Agent performance snapshot data & property lists include all
-                properties Doug Webber has sold (last 12 months) as lead and
-                secondary agent and published on realestate.com.au. It may not
-                contain off-market and private sales, properties with unknown
-                sold dates, sales while at another agent and sales that may be
-                exclusively listed on other websites. Please contact Doug Webber
-                for their full sales history.
-              </p>
-            </div>
+            {totalReviews > 0 && (
+              <div className="space-y-2 my-4 bg-white p-4 rounded-md shadow-md">
+                <p className="text-lg">
+                  <b>{averageRating}</b> ({totalReviews} reviews)
+                </p>
+                {reviewsToShow?.map((review) => (
+                  <div key={review._id} className="bg-[#F6F5F7] p-4 rounded-md">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-[2]">
+                        <div className="flex items-center mb-2">
+                          <div className="flex text-yellow-500">
+                            {[...Array(review?.rating)].map((_, index) => (
+                              <AiFillStar key={index} />
+                            ))}
+                          </div>
+                          <p className="ml-2 text-gray-700 font-semibold text-lg">
+                            {review?.rating}.0
+                          </p>
+                        </div>
+                        <p className="font-semibold text-gray-800 text-base">
+                          {review?.name}
+                        </p>
+                        <p>
+                          {formatDistanceToNow(new Date(review.createdAt), {
+                            addSuffix: true,
+                          })}
+                        </p>
+                        <div className="py-4 text-gray-800 text-sm">
+                          <p>
+                            {expandedReviews[review._id]
+                              ? review.reviews
+                              : review.reviews.length > 200
+                              ? review.reviews.slice(0, 200) + "..."
+                              : review.reviews}
+                          </p>
+                          {review.reviews.length > 200 && (
+                            <button
+                              onClick={() => toggleReviewText(review._id)}
+                              className="text-[#005180] font-semibold hover:underline mt-2"
+                            >
+                              {expandedReviews[review._id]
+                                ? "Show Less"
+                                : "Show More"}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 text-gray-500">
+                        <MdVerified className="text-gray-600" />
+                        <p className="text-sm font-semibold">Verified review</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {filteredProduct.length > 5 && (
+                  <div className="flex justify-center">
+                    <span
+                      onClick={toggleShowReviews}
+                      className="mt-4 px-4 py-2 rounded-md border hover:bg-rose-50 transition duration-500 cursor-pointer font-semibold"
+                    >
+                      {showAllReviews
+                        ? "Show less reviews"
+                        : "Show more reviews"}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {!myReview.length ? (
+              <div className="mt-10 border-t pt-10 mb-10">
+                <h2 className="text-2xl font-semibold">Leave a Review</h2>
+                <div className="mt-4">
+                  <div className="flex items-center mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FaStar
+                        key={star}
+                        className={`cursor-pointer ${
+                          star <= rating ? "text-yellow-500" : "text-gray-300"
+                        }`}
+                        onClick={() => setRating(star)}
+                      />
+                    ))}
+                  </div>
+                  <textarea
+                    className="w-full border p-2 rounded-md resize-none"
+                    rows="4"
+                    placeholder="Write your review here..."
+                    value={review}
+                    onChange={(e) => setReview(e.target.value)}
+                  />
+                  <button
+                    className="mt-4 bg-rose-600 text-white py-2 px-4 rounded-md"
+                    onClick={handleReviewSubmit}
+                  >
+                    Submit Review
+                  </button>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
           {/* contact envelop section here  */}
           <div className="col-span-4 mt-4">

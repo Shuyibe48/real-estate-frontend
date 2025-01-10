@@ -350,9 +350,9 @@ const ModerateLists = () => {
               </table>
             ) : (
               <EmptyState
-                message={"No sites are available!"}
-                address={"/products"}
-                label={"Go Add Domain"}
+                message={"No lists are available!"}
+                address={"/dashboard/moderate-lists"}
+                label={"Go to Dashboard"}
               />
             )}
           </div>

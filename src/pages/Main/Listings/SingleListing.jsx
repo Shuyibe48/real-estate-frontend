@@ -2,7 +2,10 @@ import { Bath, Bed, Car, HomeIcon, House, Square } from "lucide-react";
 import Slider from "../../../components/Listings/Slider/Slider";
 import Container from "../../../components/Shared/Container";
 import { Link, useLoaderData } from "react-router-dom";
-import { MdEventAvailable } from "react-icons/md";
+import { MdEventAvailable, MdVerified } from "react-icons/md";
+import { AiFillStar } from "react-icons/ai";
+import { formatDistanceToNow } from "date-fns";
+
 import {
   FaEnvelope,
   FaFacebook,
@@ -63,6 +66,86 @@ const SingleListing = () => {
     setUser(updatedUser);
     localStorage.setItem("user", JSON.stringify(updatedUser));
   };
+
+  const handleToggle = () => {
+    setShowMore(!showMore);
+  };
+
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState("");
+  const [showMore, setShowMore] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [expandedReviews, setExpandedReviews] = useState({});
+
+  const handleReviewSubmit = async () => {
+    try {
+      const res = await baseUrl.post(
+        `/reviews/create-reviews-property/${property?._id}`,
+        {
+          reviews: {
+            userId: user?._id,
+            id: user?.id,
+            toId: property?.id,
+            name: user?.fullName,
+            rating: rating,
+            reviews: review,
+          },
+        }
+      );
+
+      if (res.status === 200 || res.status === 201) {
+        window.alert("Review submitted successfully!");
+      } else {
+        throw new Error("Failed to submit review");
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      window.alert(
+        "An error occurred while submitting your review. Please try again."
+      );
+    }
+  };
+
+  const filteredProduct = property?.reviews
+    ?.filter(
+      (product) => product?.approved === true && product?.blocked === false
+    )
+    ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sorting by createdAt
+
+  useEffect(() => {
+    if (filteredProduct.length > 0) {
+      const total = property.reviews.length;
+      const sumRating = property.reviews.reduce(
+        (sum, review) => sum + review.rating,
+        0
+      );
+      const avgRating = sumRating / total;
+
+      setTotalReviews(total);
+      setAverageRating(avgRating.toFixed(1)); // Limiting to one decimal point
+    }
+  }, [property]);
+
+  const reviewsToShow = showAllReviews
+    ? filteredProduct
+    : filteredProduct.slice(0, 5);
+
+  const toggleShowReviews = () => {
+    setShowAllReviews(!showAllReviews);
+  };
+
+  const toggleReviewText = (reviewId) => {
+    setExpandedReviews((prevState) => ({
+      ...prevState,
+      [reviewId]: !prevState[reviewId],
+    }));
+  };
+
+  const myReview = filteredProduct?.filter(
+    (product) => product?.id === user?.id
+  );
 
   return (
     <div>
@@ -186,15 +269,110 @@ const SingleListing = () => {
               <p className="text-gray-600">{property?.saleMethod}</p>
               <h5 className="font-semibold text-lg mt-6">Description</h5>
               <p className="mt-4">{property?.description}</p>
-
-              {/* Key Features
-              <h5 className="font-semibold text-lg mt-6">Key Features</h5>
-              <ul className="list-disc list-inside space-y-2 mt-4">
-                {property?.keyFeatures?.map((feature, idx) => (
-                  <li key={idx}>{feature}</li>
-                ))}
-              </ul> */}
             </div>
+
+            {totalReviews > 0 && (
+              <div className="space-y-2 my-4 bg-white p-4 rounded-md shadow-md">
+                <p className="text-lg">
+                  <b>{averageRating}</b> ({totalReviews} reviews)
+                </p>
+                {reviewsToShow?.map((review) => (
+                  <div key={review._id} className="bg-[#F6F5F7] p-4 rounded-md">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-[2]">
+                        <div className="flex items-center mb-2">
+                          <div className="flex text-yellow-500">
+                            {[...Array(review?.rating)].map((_, index) => (
+                              <AiFillStar key={index} />
+                            ))}
+                          </div>
+                          <p className="ml-2 text-gray-700 font-semibold text-lg">
+                            {review?.rating}.0
+                          </p>
+                        </div>
+                        <p className="font-semibold text-gray-800 text-base">
+                          {review?.name}
+                        </p>
+                        <p>
+                          {formatDistanceToNow(new Date(review.createdAt), {
+                            addSuffix: true,
+                          })}
+                        </p>
+                        <div className="py-4 text-gray-800 text-sm">
+                          <p>
+                            {expandedReviews[review._id]
+                              ? review.reviews
+                              : review.reviews.length > 200
+                              ? review.reviews.slice(0, 200) + "..."
+                              : review.reviews}
+                          </p>
+                          {review.reviews.length > 200 && (
+                            <button
+                              onClick={() => toggleReviewText(review._id)}
+                              className="text-[#005180] font-semibold hover:underline mt-2"
+                            >
+                              {expandedReviews[review._id]
+                                ? "Show Less"
+                                : "Show More"}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 text-gray-500">
+                        <MdVerified className="text-gray-600" />
+                        <p className="text-sm font-semibold">Verified review</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {filteredProduct.length > 5 && (
+                  <div id="enquiry" className="flex justify-center">
+                    <span
+                      onClick={toggleShowReviews}
+                      className="mt-4 px-4 py-2 rounded-md border hover:bg-rose-50 transition duration-500 cursor-pointer font-semibold"
+                    >
+                      {showAllReviews
+                        ? "Show less reviews"
+                        : "Show more reviews"}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {!myReview.length ? (
+              <div className="mt-10 border-t pt-10">
+                <h2 className="text-2xl font-semibold">Leave a Review</h2>
+                <div className="mt-4">
+                  <div className="flex items-center mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FaStar
+                        key={star}
+                        className={`cursor-pointer ${
+                          star <= rating ? "text-yellow-500" : "text-gray-300"
+                        }`}
+                        onClick={() => setRating(star)}
+                      />
+                    ))}
+                  </div>
+                  <textarea
+                    className="w-full border p-2 rounded-md resize-none"
+                    rows="4"
+                    placeholder="Write your review here..."
+                    value={review}
+                    onChange={(e) => setReview(e.target.value)}
+                  />
+                  <button
+                    className="mt-4 bg-rose-600 text-white py-2 px-4 rounded-md"
+                    onClick={handleReviewSubmit}
+                  >
+                    Submit Review
+                  </button>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
 
           {/* Contact Section */}

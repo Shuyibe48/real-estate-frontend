@@ -46,6 +46,14 @@ import RolePermissionManager from "../pages/Dashboard/Admin/RolePermissionManage
 import ModerateLists from "../pages/Dashboard/Admin/ModerateLists";
 import Categorization from "../pages/Dashboard/Admin/Categorization";
 import EditPropertyForm from "../pages/Dashboard/Admin/EditPropertyForm";
+import PaymentIntegrationComponent from "../pages/Dashboard/Admin/PaymentIntegrationComponent";
+import ManageReviews from "../pages/Dashboard/Admin/ManageReviews";
+import ManageComplains from "../pages/Dashboard/Admin/ManageComplains";
+import Ads from "./Ads";
+import PlatformConfiguration from "../pages/Dashboard/Admin/PlatformConfiguration";
+import Security from "../pages/Dashboard/Admin/Security";
+import CreateProject from "../pages/Dashboard/Developer/CreateProject";
+import Projects from "../pages/Dashboard/Developer/Projects";
 
 export const router = createBrowserRouter([
   {
@@ -100,6 +108,10 @@ export const router = createBrowserRouter([
         path: "/plan",
         element: <GetPlan />,
       },
+      {
+        path: "/ads",
+        element: <Ads />,
+      },
     ],
   },
   {
@@ -117,6 +129,14 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/developer-profile/:id",
         element: <DeveloperProfile />,
+      },
+      {
+        path: "/dashboard/create-project",
+        element: <CreateProject />,
+      },
+      {
+        path: "/dashboard/projects/:id",
+        element: <Projects />,
       },
       {
         path: "/dashboard/manage-buyer/:id",
@@ -207,6 +227,22 @@ export const router = createBrowserRouter([
         element: <ManageLists />,
       },
       {
+        path: "/dashboard/platform-configuration",
+        element: <PlatformConfiguration />,
+      },
+      {
+        path: "/dashboard/security",
+        element: <Security />,
+      },
+      {
+        path: "/dashboard/manage-reviews",
+        element: <ManageReviews />,
+      },
+      {
+        path: "/dashboard/manage-complains",
+        element: <ManageComplains />,
+      },
+      {
         path: "/dashboard/moderate-lists",
         element: <ModerateLists />,
       },
@@ -217,6 +253,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/manage-orders",
         element: <ManageOrders />,
+      },
+      {
+        path: "/dashboard/integration-payment-system",
+        element: <PaymentIntegrationComponent />,
       },
       {
         path: "/dashboard/payment/:id",

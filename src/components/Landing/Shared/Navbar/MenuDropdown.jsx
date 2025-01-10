@@ -169,7 +169,7 @@ const MenuDropdown = () => {
                     : user.userId.role === "3" || user.userId.role === "4"
                     ? "/dashboard/dashboard-overview"
                     : user.userId.role === "5"
-                    ? "/dashboard"
+                    ? `/dashboard/developer-profile/${user._id}`
                     : "/"
                 }`}
                 className="cursor-pointer"

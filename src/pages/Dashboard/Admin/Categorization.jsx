@@ -15,7 +15,10 @@ import Loader from "../../../components/Shared/Loader";
 import baseUrl from "../../../api/baseUrl";
 import Container from "../../../components/Shared/Container";
 import { User } from "lucide-react";
-import { deleteAgentFunction } from "../../../api/users";
+import {
+  deleteAgentFunction,
+  deletePropertyFunction,
+} from "../../../api/users";
 import { Link } from "react-router-dom";
 
 const Categorization = () => {
@@ -27,6 +30,11 @@ const Categorization = () => {
   const [deleteUser, setDeleteProductId] = useState(null); // For delete modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedAction, setSelectedAction] = useState("Buy");
+
+  const handleSelectChange = (e) => {
+    setSelectedAction(e.target.value);
+  };
 
   const {
     data: responseData = {
@@ -84,7 +92,7 @@ const Categorization = () => {
   };
 
   const handleDeleteUser = (id) => {
-    deleteAgentFunction(id).then((data) => {
+    deletePropertyFunction(id).then((data) => {
       refetch();
       toast.success("Deleted Successfully!");
     });
@@ -108,17 +116,31 @@ const Categorization = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProduct = responseData?.data?.filter((product) =>
-    product?.id?.toLowerCase().includes(searchTerm?.toLowerCase())
+  const filteredProduct = responseData?.data?.filter(
+    (product) =>
+      (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+        product?.address?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+        product?.city?.toLowerCase().includes(searchTerm?.toLowerCase())) &&
+      product?.approved === true &&
+      product?.blocked === false &&
+      product?.type === selectedAction
   );
 
-  console.log(filteredProduct);
+  // const filteredProduct = responseData?.data?.filter(
+  //   (product) =>
+  //     product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+  //     product?.approved === true &&
+  //     product?.blocked === false &&
+  //     product?.type === selectedAction
+  // );
+
+  // console.log(filteredProduct);
 
   return (
     <div className="mt-8">
       <Container>
         <div className="mb-4">
-          <h5 className="text-[1.5rem] font-bold">Manage Property</h5>
+          <h5 className="text-[1.5rem] font-bold">Categorization Property</h5>
           <p className="text-[#9bbcd1] text-[1rem]">
             Welcome to the Manage Property Table!
           </p>
@@ -130,6 +152,15 @@ const Categorization = () => {
               <p className="font-light text-sm">Welcome to the Page!</p>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+              <select
+                className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[120px] text-sm"
+                value={selectedAction}
+                onChange={handleSelectChange}
+              >
+                <option value="Buy">Sell</option>
+                <option value="Rent">Rent</option>
+                <option value="Sold">Sold</option>
+              </select>
               <select
                 className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[80px] text-sm"
                 value={entries}
@@ -144,7 +175,7 @@ const Categorization = () => {
               <div className="flex justify-center items-center relative text-sm w-full sm:w-auto">
                 <input
                   type="text"
-                  placeholder="Search by ID"
+                  placeholder="Search..."
                   className="px-2 py-1 font-light outline-none rounded-md bg-[#F9F9F9] w-full sm:w-auto"
                   value={searchTerm}
                   onChange={handleSearch}
@@ -245,15 +276,13 @@ const Categorization = () => {
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
-                          $ {user?.price}
+                            $ {user?.price}
                           </span>
                         </td>
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
-                            {new Date(
-                              user?.createdAt
-                            ).toLocaleDateString()}
+                            {new Date(user?.createdAt).toLocaleDateString()}
                           </span>
                         </td>
 
@@ -293,9 +322,9 @@ const Categorization = () => {
               </table>
             ) : (
               <EmptyState
-                message={"No sites are available!"}
-                address={"/products"}
-                label={"Go Add Domain"}
+                message={"No lists are available!"}
+                address={"/dashboard/categorization-lists"}
+                label={"Go to Dashboard"}
               />
             )}
           </div>

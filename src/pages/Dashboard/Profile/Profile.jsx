@@ -13,6 +13,8 @@ const Profile = () => {
   const [edit, setEdit] = useState(false);
   const [avatar, setAvatar] = useState([]);
 
+  console.log(avatar);
+
   // State for form inputs
   const [formData, setFormData] = useState({
     firstName: user?.name?.firstName || "",

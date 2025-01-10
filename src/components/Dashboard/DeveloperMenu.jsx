@@ -3,6 +3,8 @@ import {
   Briefcase,
   Heart,
   Home,
+  Kanban,
+  Plus,
   Search,
   Settings,
   User,
@@ -22,14 +24,19 @@ const DeveloperMenu = () => {
         href={`/dashboard/developer-profile/${user?._id}`}
       />
       <DashboardSidebarMenu
+        icon={Plus}
+        label="Create Project"
+        href="/dashboard/create-project"
+      />
+      <DashboardSidebarMenu
+        icon={Kanban}
+        label="Projects"
+        href={`/dashboard/projects/${user?._id}`}
+      />
+      <DashboardSidebarMenu
         icon={BookOpenCheck}
         label="Enquiries"
         href="/dashboard/enquiries"
-      />
-      <DashboardSidebarMenu
-        icon={Heart}
-        label="Favorites"
-        href="/dashboard/favorite-properties"
       />
       {/* <DashboardSidebarMenu
           icon={Search}

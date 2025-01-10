@@ -14,34 +14,34 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import Loader from "../../../components/Shared/Loader";
 import baseUrl from "../../../api/baseUrl";
 import Container from "../../../components/Shared/Container";
-import {
-  Check,
-  CornerUpLeft,
-  ShieldBan,
-  ShieldCheck,
-  User,
-  X,
-} from "lucide-react";
+import { Check, CornerUpLeft, User, X } from "lucide-react";
 import {
   approvedListFunction,
-  blockListFunction,
+  approvedReviewFunction,
   deleteAgentFunction,
   rejectListFunction,
+  rejectReviewFunction,
+  vanishReviewFunction,
 } from "../../../api/users";
 import { Link } from "react-router-dom";
 
-const ModerateLists = () => {
+const ManageReviews = () => {
   const [entries, setEntries] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedUser, setSelectedProduct] = useState(null); // For edit modal
   const [isViewModalOpen, setIsEditModalOpen] = useState(false);
 
   const [deleteUser, setDeleteProductId] = useState(null); // For delete modal
+  const [vanishUser, setVanishProductId] = useState(null); // For delete modal
   const [approved, setApprovedProductId] = useState(null); // For delete modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isVanishModalOpen, setIsVanishModalOpen] = useState(false);
   const [isApprovedModalOpen, setIsApprovedModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [action, setAction] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [currentReviewText, setCurrentReviewText] = useState("");
+  const [currentRating, setCurrentRating] = useState("");
 
   const {
     data: responseData = {
@@ -55,10 +55,10 @@ const ModerateLists = () => {
     refetch,
     error,
   } = useQuery({
-    queryKey: ["properties/get-properties", entries, currentPage],
+    queryKey: ["reviews/get-reviews", entries, currentPage],
     queryFn: async ({ queryKey }) => {
       const [_key, entries, currentPage] = queryKey;
-      const { data } = await baseUrl.get(`properties/get-properties`, {
+      const { data } = await baseUrl.get(`reviews/get-reviews`, {
         params: {
           limit: entries,
           page: currentPage,
@@ -94,6 +94,13 @@ const ModerateLists = () => {
     setIsDeleteModalOpen(true);
   };
 
+  
+  // Delete Modal Handler
+  const handleOpenVanishModal = (id) => {
+    setVanishProductId(id); // Pass the selected product id
+    setIsVanishModalOpen(true);
+  };
+
   // Delete Modal Handler
   const handleOpenApprovedModal = (id) => {
     setApprovedProductId(id); // Pass the selected product id
@@ -104,12 +111,16 @@ const ModerateLists = () => {
     setIsDeleteModalOpen(false);
   };
 
+  const handleCloseVanishModal = () => {
+    setIsVanishModalOpen(false);
+  };
+
   const handleCloseApprovedModal = () => {
     setIsApprovedModalOpen(false);
   };
 
   const handleDeleteUser = (id) => {
-    blockListFunction(id).then((data) => {
+    rejectReviewFunction(id).then((data) => {
       refetch();
       console.log(data);
       window.alert("Rejected Successfully!");
@@ -117,9 +128,17 @@ const ModerateLists = () => {
     handleCloseDeleteModal();
   };
 
-  const handleApprovedUser = (id) => {
-    approvedListFunction(id).then((data) => {
+  const handleVanishUser = (id) => {
+    vanishReviewFunction(id).then((data) => {
+      refetch();
       console.log(data);
+      window.alert("Deleted Successfully!");
+    });
+    handleCloseVanishModal();
+  };
+
+  const handleApprovedUser = (id) => {
+    approvedReviewFunction(id).then((data) => {
       refetch();
       window.alert("Approved Successfully!");
     });
@@ -146,32 +165,70 @@ const ModerateLists = () => {
   const filteredProduct = responseData?.data?.filter(
     (product) =>
       product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
-      product?.approved === true &&
-      product?.blocked === action
+      product?.approved === false &&
+      product?.reject === action
   );
+
+  const openReviewModal = (review, rating) => {
+    setCurrentReviewText(review);
+    setCurrentRating(rating);
+    setIsReviewModalOpen(true);
+  };
+
+  const closeReviewModal = () => {
+    setIsReviewModalOpen(false);
+  };
+
+  const handleReviewEditChange = (e) => {
+    setCurrentReviewText(e.target.value);
+  };
+
+  const handleRatingChange = (e) => {
+    setCurrentRating(e.target.value);
+  };
+
+  const saveReviewRating = async (id) => {
+    const reviewRatingData = {
+      reviews: currentReviewText,
+      rating: Number(currentRating),
+    };
+
+    try {
+      const response = await baseUrl.patch(`reviews/${id}`, {
+        review: reviewRatingData,
+      });
+      if (response.data.data.success === true) {
+        refetch();
+        window.alert("Successfully updated");
+      }
+      closeReviewModal(); // Close the modal on successful update
+    } catch (error) {
+      console.error("Error updating review and rating:", error);
+    }
+  };
 
   return (
     <div className="mt-8">
       <Container>
         <div className="mb-4">
-          <h5 className="text-[1.5rem] font-bold">Manage Property</h5>
+          <h5 className="text-[1.5rem] font-bold">Manage Reviews</h5>
           <p className="text-[#9bbcd1] text-[1rem]">
-            Welcome to the Moderate Property Table!
+            Welcome to the Manage Reviews Table!
           </p>
         </div>
         <div className="overflow-x-auto min-w-[300px] flex flex-col justify-between mb-4 mt-6 bg-[#FDF8F4] shadow-lg p-6 rounded-lg">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
             <div className="mb-4">
-              <h5 className="text-xl font-semibold">All Properties List</h5>
+              <h5 className="text-xl font-semibold">All Reviews List</h5>
               <p className="font-light text-sm">Welcome to the Page!</p>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
               <select
                 className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[120px] text-sm"
-                onChange={(e) => setAction(e.target.value === "true")}
+                onChange={(e) => setAction(e.target.value === "false")}
               >
-                <option value="false">Active</option>
-                <option value="true">Inactive</option>
+                <option value="true">Pending</option>
+                <option value="false">Reject</option>
               </select>
               <select
                 className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[80px] text-sm"
@@ -210,33 +267,26 @@ const ModerateLists = () => {
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
                     >
-                      Image
+                      From
                     </th>
                     <th
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
                     >
-                      Title
+                      To
                     </th>
                     <th
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
                     >
-                      Property ID
+                      Comment
                     </th>
                     <th
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
                     >
-                      Type
+                      Rating
                     </th>
-                    <th
-                      scope="col"
-                      className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
-                    >
-                      Price
-                    </th>
-
                     <th
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
@@ -257,40 +307,83 @@ const ModerateLists = () => {
                     filteredProduct?.map((user) => (
                       <tr key={user?._id}>
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
-                          <div className="w-[40px] h-[40px] flex justify-center items-center">
-                            {user?.images[0] ? (
-                              <img
-                                className="w-full h-full rounded-full"
-                                src={user?.images[0]}
-                                alt="profile"
-                              />
-                            ) : (
-                              <User className="h-5 w-5 rounded-full text-gray-400" />
-                            )}
-                          </div>
-                        </td>
-
-                        <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
-                          <span className="font-light text-sm rounded-md">
-                            {user?.title}
-                          </span>
-                        </td>
-                        <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
                             {user?.id}
                           </span>
                         </td>
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
-                            {user?.type}
+                            {user?.toId}
                           </span>
                         </td>
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
-                          <span className="font-light text-sm rounded-md">
-                            $ {user?.price}
+                          <span
+                            className="font-light text-sm rounded-md cursor-pointer"
+                            onClick={() =>
+                              openReviewModal(user?.reviews, user?.rating)
+                            }
+                          >
+                            {user?.reviews?.length > 10
+                              ? `${user.reviews.substring(0, 10)}...`
+                              : user.reviews}
                           </span>
                         </td>
+
+                        <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
+                          <span
+                            onClick={() =>
+                              openReviewModal(user?.reviews, user?.rating)
+                            }
+                            className="font-light text-sm rounded-md"
+                          >
+                            {user?.rating}
+                          </span>
+                        </td>
+
+                        {isReviewModalOpen && (
+                          <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+                            <div className="bg-white p-6 rounded-md max-w-md w-full">
+                              <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Review
+                                </label>
+                                <textarea
+                                  value={currentReviewText}
+                                  onChange={handleReviewEditChange}
+                                  className="w-full h-56 outline-none resize-none border border-gray-300 rounded-md p-2"
+                                />
+                              </div>
+                              <div className="mb-4">
+                                <label className="block outline-none text-sm font-medium text-gray-700">
+                                  Rating
+                                </label>
+                                <input
+                                  type="number"
+                                  value={currentRating}
+                                  onChange={handleRatingChange}
+                                  className="w-full border border-gray-300 rounded-md p-2"
+                                  min="1"
+                                  max="5"
+                                />
+                              </div>
+                              <div className="mt-4 flex justify-end">
+                                <button
+                                  className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                                  onClick={() => saveReviewRating(user?._id)}
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  className="bg-red-500 text-white px-4 py-2 rounded-md"
+                                  onClick={closeReviewModal}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
@@ -300,21 +393,42 @@ const ModerateLists = () => {
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <div className="flex items-center gap-2">
-                            <Link to={`/dashboard/update-property/${user?._id}`}>
-                              <span className="text-[#99A1B7] hover:text-blue-500 transition duration-150 cursor-pointer">
-                                <CiViewTable size={18} />
+                            <span
+                              onClick={() =>
+                                openReviewModal(user?.reviews, user?.rating)
+                              }
+                              className="text-[#99A1B7] hover:text-blue-500 transition duration-150 cursor-pointer"
+                            >
+                              <CiViewTable size={18} />
+                            </span>
+
+                            {!action && (
+                              <span
+                                onClick={() =>
+                                  handleOpenApprovedModal(user?._id)
+                                } // Pass the ID for deletion
+                                className="text-[#99A1B7] hover:text-green-500 transition duration-150 cursor-pointer"
+                              >
+                                <Check size={18} />
                               </span>
-                            </Link>
+                            )}
 
                             <span
                               onClick={() => handleOpenDeleteModal(user?._id)} // Pass the ID for deletion
                               className="text-[#99A1B7] hover:text-red-500 transition duration-150 cursor-pointer"
                             >
                               {action ? (
-                                <ShieldCheck size={18} />
+                                <CornerUpLeft size={18} />
                               ) : (
-                                <ShieldBan size={18} />
+                                <X size={18} />
                               )}
+                            </span>
+
+                            <span
+                              onClick={() => handleOpenVanishModal(user?._id)} // Pass the ID for deletion
+                              className="text-[#99A1B7] hover:text-red-500 transition duration-150 cursor-pointer"
+                            >
+                              <DeleteOutlined size={18} />
                             </span>
                           </div>
 
@@ -333,6 +447,13 @@ const ModerateLists = () => {
                             id={deleteUser}
                           />
 
+                          <DeleteModal
+                            isOpen={isVanishModalOpen}
+                            closeModal={handleCloseVanishModal}
+                            modalHandler={() => handleVanishUser(vanishUser)} // Pass the ID for delete
+                            id={vanishUser}
+                          />
+
                           {/* Delete Modal */}
                           <DeleteModal
                             isOpen={isApprovedModalOpen}
@@ -348,7 +469,7 @@ const ModerateLists = () => {
             ) : (
               <EmptyState
                 message={"No lists are available!"}
-                address={"/dashboard/manage-lists"}
+                address={"/dashboard/moderate-lists"}
                 label={"Go to Dashboard"}
               />
             )}
@@ -374,4 +495,4 @@ const ModerateLists = () => {
   );
 };
 
-export default ModerateLists;
+export default ManageReviews;

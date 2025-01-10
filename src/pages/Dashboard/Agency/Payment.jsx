@@ -88,7 +88,7 @@ const Payment = () => {
           <div className="overflow-x-auto min-w-[300px] flex flex-col justify-between mb-4 mt-6 bg-[#FDF8F4] shadow-lg p-6 rounded-lg">
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2 md:gap-0">
               <div className="mb-4">
-                <h5 className="text-xl font-semibold">My Payments List</h5>
+                <h5 className="text-xl font-semibold">All Payments List</h5>
                 <p className="font-light text-sm">Welcome to the Page!</p>
               </div>
 

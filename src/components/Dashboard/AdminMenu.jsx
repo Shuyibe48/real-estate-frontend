@@ -4,6 +4,7 @@ import {
   AlertOctagon,
   AlertTriangle,
   ArrowBigUpDash,
+  ArrowLeftRight,
   BadgeDollarSign,
   BookCheck,
   BrainCircuit,
@@ -219,14 +220,14 @@ const AdminMenu = () => {
       {showPayment && (
         <div className="ps-2">
           <DashboardSidebarMenu
-            icon={BookCheck}
-            label="Completed transactions"
+            icon={ArrowLeftRight}
+            label="Monitor transactions"
             href="/dashboard/manage-orders"
           />
           <DashboardSidebarMenu
             icon={MdPayment}
-            label="Payment history for users"
-            href="/dashboard/manage-orders"
+            label="Integrate payment systems"
+            href="/dashboard/integration-payment-system"
           />
         </div>
       )}
@@ -254,12 +255,12 @@ const AdminMenu = () => {
           <DashboardSidebarMenu
             icon={StarHalf}
             label="Manage reviews"
-            href="/dashboard/manage-orders"
+            href="/dashboard/manage-reviews"
           />
           <DashboardSidebarMenu
             icon={BrainCircuit}
             label="Handle complaints"
-            href="/dashboard/manage-orders"
+            href="/dashboard/manage-complains"
           />
         </div>
       )}
@@ -351,22 +352,22 @@ const AdminMenu = () => {
           <DashboardSidebarMenu
             icon={LayoutTemplate}
             label="Platform configuration"
-            href="/dashboard/plan"
+            href="/dashboard/platform-configuration"
           />
           <DashboardSidebarMenu
             icon={ShieldAlert}
             label="Security"
-            href="/dashboard/plan"
+            href="/dashboard/security"
           />
-          <DashboardSidebarMenu
+          {/* <DashboardSidebarMenu
             icon={DatabaseBackup}
             label="Backup and restore"
             href="/dashboard/plan"
-          />
+          /> */}
         </div>
       )}
       {/* project */}
-      <button
+      {/* <button
         onClick={() => setShowLogs((prev) => !prev)}
         className="flex w-full items-center justify-between px-8 py-3 text-[#333537]"
       >
@@ -381,9 +382,9 @@ const AdminMenu = () => {
         ) : (
           <ChevronDown className="h-4 w-4" />
         )}
-      </button>
+      </button> */}
       {/* project list */}
-      {showLogs && (
+      {/* {showLogs && (
         <div className="ps-2">
           <DashboardSidebarMenu
             icon={Activity}
@@ -396,7 +397,7 @@ const AdminMenu = () => {
             href="/dashboard/plan"
           />
         </div>
-      )}
+      )} */}
       {/* project */}
       <button
         onClick={() => setShowSupport((prev) => !prev)}

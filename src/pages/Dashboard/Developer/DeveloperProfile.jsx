@@ -44,7 +44,6 @@ const DeveloperProfile = () => {
       },
     ],
   });
-  
 
   useEffect(() => {
     if (data) {
@@ -168,12 +167,12 @@ const DeveloperProfile = () => {
                 </span>
               )}
             </div>
-            <div className="flex justify-between items-start">
-              <div className="flex items-start gap-4">
+            <div className="flex flex-col justify-between items-start">
+              <div className="flex flex-col items-start gap-4">
                 <div>
                   <div className="flex items-center space-x-4">
                     <img
-                      className="w-[120px] h-[120px] rounded-full border-2 border-rose-500"
+                      className="w-screen h-[420px] rounded-md border-2 border-rose-500"
                       src={
                         avatar[0] ||
                         formData.profileImage ||
@@ -206,8 +205,8 @@ const DeveloperProfile = () => {
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div>
-                    <div className="space-y-1">
+                  {/* <div> */}
+                  {/* <div className="space-y-1">
                       <input
                         className="px-2 text-xl outline-none rounded-md bg-transparent transition duration-500"
                         name="firstName"
@@ -219,8 +218,8 @@ const DeveloperProfile = () => {
                         onChange={handleInputChange}
                         required
                       />
-                    </div>
-                    <div className="space-y-1">
+                    </div> */}
+                  {/* <div className="space-y-1">
                       <input
                         className="px-2 outline-none rounded-md text-xl bg-transparent transition duration-500"
                         name="lastName"
@@ -232,9 +231,25 @@ const DeveloperProfile = () => {
                         onChange={handleInputChange}
                         required
                       />
-                    </div>
+                    </div> */}
+                  {/* </div> */}
+                  <div className="space-y-1 flex justify-between items-center">
+                    <p className="font-semibold w-[200px]">Company Name</p>
+                    <p>:</p>
+                    <input
+                      className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
+                      name="companyName"
+                      id="companyName"
+                      type="text"
+                      placeholder="Company Name"
+                      disabled={!edit}
+                      value={formData.companyName}
+                      onChange={handleInputChange}
+                    />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 flex justify-between items-center">
+                    <p className="font-semibold w-[200px]">Email</p>
+                    <p>:</p>
                     <input
                       className="w-full px-2 outline-none font-semibold rounded-md text-sm bg-transparent transition duration-500"
                       name="email"
@@ -247,7 +262,9 @@ const DeveloperProfile = () => {
                       required
                     />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 flex justify-between items-center">
+                    <p className="font-semibold w-[200px]">Contact</p>
+                    <p>:</p>
                     <input
                       className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
                       name="contactNo"
@@ -259,7 +276,9 @@ const DeveloperProfile = () => {
                       onChange={handleInputChange}
                     />
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 flex justify-between items-center">
+                    <p className="font-semibold w-[200px]">Address</p>
+                    <p>:</p>
                     <input
                       className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
                       name="address"
@@ -271,19 +290,9 @@ const DeveloperProfile = () => {
                       onChange={handleInputChange}
                     />
                   </div>
-                  <div className="space-y-1">
-                    <input
-                      className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
-                      name="companyName"
-                      id="companyName"
-                      type="text"
-                      placeholder="Company Name"
-                      disabled={!edit}
-                      value={formData.companyName}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 flex justify-between items-start">
+                    <p className="font-semibold w-[200px] pt-1">Description</p>
+                    <p>:</p>
                     <textarea
                       className="resize-none w-full h-[70px] px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
                       name="description"
@@ -297,50 +306,65 @@ const DeveloperProfile = () => {
                 </div>
               </div>
               <div className="space-y-1">
-                <label htmlFor="licenses" className="block font-semibold">
+                <label
+                  htmlFor="licenses"
+                  className="block font-semibold text-lg"
+                >
                   Licenses
                 </label>
                 {formData.licenses.map((license, index) => (
                   <div key={index} className="space-y-1">
-                    <input
-                      className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
-                      name={`licenseNumber-${index}`}
-                      type="text"
-                      placeholder="License Number"
-                      disabled={!edit}
-                      value={license.licenseNumber}
-                      onChange={(e) =>
-                        handleLicenseChange(e, index, "licenseNumber")
-                      }
-                    />
-                    <input
-                      className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
-                      name={`issuedBy-${index}`}
-                      type="text"
-                      placeholder="Issued By"
-                      disabled={!edit}
-                      value={license.issuedBy}
-                      onChange={(e) =>
-                        handleLicenseChange(e, index, "issuedBy")
-                      }
-                    />
-                    <input
-                      className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
-                      name={`expiryDate-${index}`}
-                      type="date"
-                      placeholder="Expiry Date"
-                      disabled={!edit}
-                      value={
-                        license.expiryDate
-                          ? new Date(license.expiryDate)
-                              .toISOString()
-                              .split("T")[0]
-                          : ""
-                      }
-                      onChange={(e) =>
-                        handleLicenseChange(e, index, "expiryDate")
-                      }
-                    />
+                    <div className="space-y-1 flex justify-between items-center">
+                      <p className="font-semibold w-[200px]">License Number</p>
+                      <p>:</p>
+                      <input
+                        className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
+                        name={`licenseNumber-${index}`}
+                        type="text"
+                        placeholder="License Number"
+                        disabled={!edit}
+                        value={license.licenseNumber}
+                        onChange={(e) =>
+                          handleLicenseChange(e, index, "licenseNumber")
+                        }
+                      />
+                    </div>
+                    <div className="space-y-1 flex justify-between items-center">
+                      <p className="font-semibold w-[200px]">Issued By</p>
+                      <p>:</p>
+                      <input
+                        className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
+                        name={`issuedBy-${index}`}
+                        type="text"
+                        placeholder="Issued By"
+                        disabled={!edit}
+                        value={license.issuedBy}
+                        onChange={(e) =>
+                          handleLicenseChange(e, index, "issuedBy")
+                        }
+                      />
+                    </div>
+                    <div className="space-y-1 flex justify-between items-center">
+                      <p className="font-semibold w-[200px]">Expiry Date</p>
+                      <p>:</p>
+                      <input
+                        className="w-full px-2 outline-none rounded-md text-sm bg-transparent transition duration-500"
+                        name={`expiryDate-${index}`}
+                        type="date"
+                        placeholder="Expiry Date"
+                        disabled={!edit}
+                        value={
+                          license.expiryDate
+                            ? new Date(license.expiryDate)
+                                .toISOString()
+                                .split("T")[0]
+                            : ""
+                        }
+                        onChange={(e) =>
+                          handleLicenseChange(e, index, "expiryDate")
+                        }
+                      />
+                    </div>
                   </div>
                 ))}
                 {edit && !data?.licenses?.length > 0 && (
