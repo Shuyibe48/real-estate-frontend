@@ -6,15 +6,18 @@ import Loader from "../../../components/Shared/Loader";
 import Container from "../../../components/Shared/Container";
 import baseUrl from "../../../api/baseUrl";
 import { Link } from "react-router-dom";
-import { History } from "lucide-react";
+import { History, X } from "lucide-react";
+import InvoiceComponent from "./InvoiceComponent";
 
 const ManageOrders = () => {
   // States for managing entries, pagination, and search
+  const [editPlan, setEditPlan] = useState(null);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [paymentData, setPaymentData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -32,7 +35,10 @@ const ManageOrders = () => {
     fetchPayments();
   }, []);
 
-  console.log(paymentData);
+  const handleEdit = (invoice) => {
+    setEditPlan(invoice);
+    setIsEditModalOpen(true);
+  };
 
   // Filtered data based on search term
   const filteredData = paymentData?.filter((item) =>
@@ -72,6 +78,13 @@ const ManageOrders = () => {
       const years = Math.floor(days / 365);
       return `${years} Year${years > 1 ? "s" : ""}`;
     }
+  };
+
+  const invoiceData = {
+    invoiceNumber: editPlan?.sessionId,
+    date: editPlan?.createdAt,
+    customerName: editPlan?.agency?.name,
+    amount: editPlan?.plan?.price,
   };
 
   return (
@@ -156,6 +169,9 @@ const ManageOrders = () => {
                       <th className="py-3 bg-[#FDF8F4] border-r border-t border-b px-2 border-gray-200 text-[#99A1B7] text-left text-sm uppercase font-semibold">
                         History
                       </th>
+                      <th className="py-3 bg-[#FDF8F4] border-r border-t border-b px-2 border-gray-200 text-[#99A1B7] text-left text-sm uppercase font-semibold">
+                        Invoice
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -208,8 +224,16 @@ const ManageOrders = () => {
                         </td>
                         <td className="py-2 border-r border-t border-b px-2 border-gray-200 bg-[#FDF8F4] text-sm">
                           <Link to={`/dashboard/payment/${item?.agency?._id}`}>
-                            <History className="h-4 w-4"/>
+                            <History className="h-4 w-4" />
                           </Link>
+                        </td>
+                        <td className="py-2 border-r border-t border-b px-2 border-gray-200 bg-[#FDF8F4] text-sm">
+                          <span
+                            onClick={() => handleEdit(item)}
+                            className="cursor-pointer"
+                          >
+                            Download PDF
+                          </span>
                         </td>
                       </tr>
                     ))}
@@ -223,6 +247,28 @@ const ManageOrders = () => {
                 />
               )}
             </div>
+
+            {/* Edit Modal */}
+            {isEditModalOpen && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-2/3">
+                  <span className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-semibold">Invoice</h3>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsEditModalOpen(false)}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </span>
+
+                  <span>
+                    <InvoiceComponent invoiceData={invoiceData} />
+                  </span>
+                </div>
+              </div>
+            )}
 
             <div className="pagination mt-6 flex justify-between items-center">
               <p className="font-light text-xs text-gray-500">

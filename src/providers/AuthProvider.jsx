@@ -55,7 +55,8 @@ const AuthProvider = ({ children }) => {
   // [[[[[[[[[]]]]]]]]]
 
   // ইউজার ডাটা আপডেট বা লগআউটের জন্য ফাংশন তৈরি
-  const loginUser = async (email, password) => {
+  const loginUser = async (email, password, navigate, from) => {
+    setLoading(true);
     try {
       const response = await baseUrl.post(`/auth/login`, {
         email,
@@ -74,13 +75,20 @@ const AuthProvider = ({ children }) => {
           Authorization: token,
         },
       });
-      
+
       const currentUser = res?.data?.data;
+      if (currentUser) {
+        window.alert("Successfully Login!");
+        setLoading(false);
+        navigate(from, { replace: true });
+      }
 
       setUser(currentUser);
       localStorage.setItem("user", JSON.stringify(currentUser));
     } catch (error) {
-      console.error("Login failed:", error);
+      setLoading(false);
+      console.error("Login failed:", error?.response?.data?.message);
+      window.alert(error?.response?.data?.message);
     }
   };
 

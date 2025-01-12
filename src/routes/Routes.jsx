@@ -15,7 +15,15 @@ import Portfolio from "../pages/Dashboard/Agent/Portfolio/Portfolio";
 import Agency from "../pages/Dashboard/Agent/Agency/Agency";
 import Team from "../pages/Dashboard/Agent/Agency/Team/Team";
 import SinglePortfolio from "../pages/Dashboard/Agent/Portfolio/SinglePortfolio";
-import { getAgent, getSingleAdmin, getSingleAgency, getSingleAgent, getSingleBuyer, getSingleList, getSingleProperty } from "../api/utils";
+import {
+  getAgent,
+  getSingleAdmin,
+  getSingleAgency,
+  getSingleAgent,
+  getSingleBuyer,
+  getSingleList,
+  getSingleProperty,
+} from "../api/utils";
 import AgentListings from "../pages/Main/AgentListings/AgentListings";
 import AgenciesListings from "../pages/Main/AgenciesListings/AgenciesListings";
 import FavoriteProperties from "../pages/Dashboard/Buyer/FavoriteProperties";
@@ -55,6 +63,14 @@ import Security from "../pages/Dashboard/Admin/Security";
 import CreateProject from "../pages/Dashboard/Developer/CreateProject";
 import Projects from "../pages/Dashboard/Developer/Projects";
 import SingleProject from "../pages/Dashboard/Developer/SingleProject";
+import ManageBlog from "../pages/Dashboard/Admin/ManageBlog";
+import Blog from "../pages/Dashboard/Admin/Blog";
+import SingleBlog from "../pages/Dashboard/Admin/SingleBlog";
+import FindDeveloper from "../pages/Dashboard/Admin/FindDeveloper";
+import SingleDeveloper from "../pages/Dashboard/Admin/SingleDeveloper";
+import ManageProject from "../pages/Dashboard/Admin/ManageProject";
+import Seo from "../pages/Dashboard/Admin/seo";
+import AdCampaignDashboard from "../pages/Dashboard/Admin/AdCampaignDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -110,6 +126,22 @@ export const router = createBrowserRouter([
         element: <GetPlan />,
       },
       {
+        path: "/blog",
+        element: <Blog />,
+      },
+      {
+        path: "/blog/:id",
+        element: <SingleBlog />,
+      },
+      {
+        path: "/developer",
+        element: <FindDeveloper />,
+      },
+      {
+        path: "/developer/:id",
+        element: <SingleDeveloper />,
+      },
+      {
         path: "/ads",
         element: <Ads />,
       },
@@ -132,6 +164,10 @@ export const router = createBrowserRouter([
         element: <DeveloperProfile />,
       },
       {
+        path: "/dashboard/seo",
+        element: <Seo />,
+      },
+      {
         path: "/dashboard/create-project",
         element: <CreateProject />,
       },
@@ -142,6 +178,14 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/single-project/:id",
         element: <SingleProject />,
+      },
+      {
+        path: "/dashboard/blog",
+        element: <ManageBlog />,
+      },
+      {
+        path: "/dashboard/project-management",
+        element: <ManageProject />,
       },
       {
         path: "/dashboard/manage-buyer/:id",
@@ -282,6 +326,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/plan",
         element: <Plan />,
+      },
+      {
+        path: "/dashboard/advertising",
+        element: <AdCampaignDashboard />,
       },
     ],
   },

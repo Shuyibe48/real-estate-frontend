@@ -108,7 +108,7 @@ const CreateLists = () => {
           agentId: user?._id,
           property: {
             title: inputs.title, //
-            description: value, //
+            description: inputs.description, //
             type: selectedType, //
             propertyType: propertyType, //
             price: Number(inputs.price), //
@@ -668,12 +668,19 @@ const CreateLists = () => {
                       Description
                     </label>
                     <div className="block pb-20 sm:pb-10">
-                      <ReactQuill
+                      <textarea
+                        className="h-32 w-full resize-none px-2 py-2 border rounded-md outline-none"
+                        name="description"
+                        id="description"
+                        placeholder="Description"
+                        required
+                      />
+                      {/* <ReactQuill
                         className="h-32 w-full"
                         theme="snow"
                         onChange={setValue}
                         value={value}
-                      />
+                      /> */}
                     </div>
                   </div>
 

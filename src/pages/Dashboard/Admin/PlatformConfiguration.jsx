@@ -7,10 +7,13 @@ import Container from "../../../components/Shared/Container";
 const PlatformConfiguration = () => {
   const [logo, setLogo] = useState("");
   const [banner, setBanner] = useState("");
+  const [developerBanner, setDeveloperBanner] = useState("");
   const [editLogo, setEditLogo] = useState(false);
   const [editBanner, setEditBanner] = useState(false);
+  const [editDeveloperBanner, setEditDeveloperBanner] = useState(false);
   const [platformsLogo, setPlatformsLogo] = useState([]);
   const [platformsBanner, setPlatformsBanner] = useState([]);
+  const [platformsDeveloperBanner, setPlatformsDeveloperBanner] = useState([]);
   const [platformId, setPlatformId] = useState("");
 
   useEffect(() => {
@@ -20,6 +23,7 @@ const PlatformConfiguration = () => {
         const platformData = res?.data?.data?.[0];
         setLogo(platformData?.logo);
         setBanner(platformData?.banner);
+        setDeveloperBanner(platformData?.developerBanner);
         setPlatformId(platformData?._id);
       } catch (error) {
         console.error("Error fetching images:", error);
@@ -34,12 +38,14 @@ const PlatformConfiguration = () => {
         platform: {
           logo: platformsLogo[0],
           banner: platformsBanner[0],
+          developerBanner: platformsDeveloperBanner[0],
         },
       });
       if (res?.data?.data?.success) {
         window.alert("Updated successfully!");
         setEditLogo(false);
         setEditBanner(false);
+        setEditDeveloperBanner(false);
       }
     } catch (error) {
       console.error("Error updating", error);
@@ -50,7 +56,10 @@ const PlatformConfiguration = () => {
   return (
     <div className="my-10">
       <Container>
-        <form onSubmit={handleImageUpdate} className="image-update-component space-y-10">
+        <form
+          onSubmit={handleImageUpdate}
+          className="image-update-component space-y-10"
+        >
           <div className="image-section flex justify-start items-start gap-4">
             <h3 className="font-semibold text-lg">Logo</h3>
             <img
@@ -81,7 +90,7 @@ const PlatformConfiguration = () => {
           <div className="image-section flex justify-start items-start gap-4">
             <h3 className="font-semibold text-lg">Banner</h3>
             <img
-              src={platformsBanner[0] || banner }
+              src={platformsBanner[0] || banner}
               alt="Banner"
               className="image-preview h-400px w-3/4"
             />
@@ -107,7 +116,36 @@ const PlatformConfiguration = () => {
             )}
           </div>
 
-          {(editLogo || editBanner) && (
+          <div className="image-section flex justify-start items-start gap-4">
+            <h3 className="font-semibold text-lg">Developer Banner</h3>
+            <img
+              src={platformsBanner[0] || developerBanner}
+              alt="Banner"
+              className="image-preview h-400px w-3/4"
+            />
+            {editDeveloperBanner ? (
+              <UploadWidget
+                uwConfig={{
+                  cloudName: "drvj2jdcs",
+                  uploadPreset: "realestate",
+                  multiple: false,
+                  maxImageFileSize: 2000000,
+                  folder: "banners",
+                }}
+                setState={setPlatformsDeveloperBanner}
+              >
+                {({ open }) => (
+                  <button onClick={open}>Upload New Developer Banner</button>
+                )}
+              </UploadWidget>
+            ) : (
+              <button onClick={() => setEditDeveloperBanner(true)}>
+                <Edit />
+              </button>
+            )}
+          </div>
+
+          {(editLogo || editBanner || editDeveloperBanner) && (
             <button
               type="submit"
               className="bg-rose-500 text-white font-semibold py-1 px-4 rounded-md"

@@ -23,18 +23,7 @@ const Login = () => {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
-    setLoading(true);
-
-    try {
-      await loginUser(email, password).then((data) => {
-        window.alert("Successfully Login!");
-        setLoading(false);
-        navigate(from, { replace: true });
-      });
-    } catch (error) {
-      toast.error(error);
-      setLoading(false);
-    }
+    await loginUser(email, password, navigate, from);
 
     return;
   };

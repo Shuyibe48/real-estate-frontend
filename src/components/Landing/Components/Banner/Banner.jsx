@@ -28,7 +28,7 @@ const Banner = () => {
             backgroundImage: `url(${logo || "default-placeholder.jpg"})`,
           }}
         >
-          <FilterBox />[]
+          <FilterBox />
         </div>
       </Container>
     </div>

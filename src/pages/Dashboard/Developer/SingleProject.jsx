@@ -1,7 +1,5 @@
 import { Bath, Bed, Car, Square } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-
-import { FaMapMarkerAlt } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import baseUrl from "../../../api/baseUrl";
 import Container from "../../../components/Shared/Container";
@@ -24,7 +22,7 @@ const SingleProject = () => {
 
   const {
     data: responseData = {
-      data: [],
+      data: {},
     },
     isLoading,
     refetch,
@@ -45,7 +43,6 @@ const SingleProject = () => {
   if (isLoading) return <Loader />;
   if (error) return "An error has occurred: " + error.message;
 
-  // Function to handle Next button click
   const handleSubmit = async () => {
     const message = `
     Description : ${formData?.message}
@@ -76,23 +73,23 @@ const SingleProject = () => {
   return (
     <div>
       <Container>
-        {/* Image Slider */}
         <div>
-          <ImageSlider images={responseData?.data?.images} />
+          {responseData?.data?.images?.length > 0 ? (
+            <ImageSlider images={responseData?.data?.images} />
+          ) : (
+            <p>No images available</p>
+          )}
         </div>
 
-        {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-4">
-          {/* Left Section */}
           <div className="lg:col-span-8">
-            {/* Header Section */}
             <div className="flex justify-between items-start border-b py-8">
               <div className="flex flex-col gap-2">
                 <h1 className="text-xl font-semibold">
-                  {responseData?.data?.title}
+                  {responseData?.data?.title || "No Title"}
                 </h1>
                 <div className="text-lg">
-                  From $ {responseData?.data?.price}
+                  From ${responseData?.data?.price || "N/A"}
                 </div>
               </div>
             </div>
@@ -105,11 +102,10 @@ const SingleProject = () => {
                 <div className="font-semibold">Choose your floorplan</div>
               </div>
               <div className="border rounded-md p-8">
-                <img src={responseData?.data?.images[0]} alt="" />
+                <img src={responseData?.data?.images?.[0] || "default-image-url"} alt="Floorplan" />
               </div>
             </div>
 
-            {/* responseData?.data?Information */}
             <div
               id="enquiry"
               className="border-b py-8 grid grid-cols-2 md:grid-cols-4 gap-6"
@@ -118,22 +114,24 @@ const SingleProject = () => {
                 {
                   label: "BEDROOMS",
                   icon: <Bed className="h-5 w-5" />,
-                  value: responseData?.data?.bedrooms,
+                  value: responseData?.data?.bedrooms || "N/A",
                 },
                 {
                   label: "BATHROOMS",
                   icon: <Bath className="h-5 w-5" />,
-                  value: responseData?.data?.bathrooms,
+                  value: responseData?.data?.bathrooms || "N/A",
                 },
                 {
                   label: "SIZE",
                   icon: <Square className="h-5 w-5" />,
-                  value: `${responseData?.data?.landSize}m²`,
+                  value: responseData?.data?.landSize
+                    ? `${responseData?.data?.landSize}m²`
+                    : "N/A",
                 },
                 {
                   label: "CAR SPACES",
                   icon: <Car className="h-5 w-5" />,
-                  value: responseData?.data?.carSpaces,
+                  value: responseData?.data?.carSpaces || "N/A",
                 },
               ].map((item, idx) => (
                 <div key={idx} className="flex flex-col gap-2">
@@ -158,7 +156,7 @@ const SingleProject = () => {
                       name="enquiryType"
                       value="If you build in my area"
                       checked={
-                        formData.enquiryType === "If you build in my area"
+                        formData?.enquiryType === "If you build in my area"
                       }
                       onChange={() =>
                         setFormData({
@@ -192,7 +190,7 @@ const SingleProject = () => {
                 <textarea
                   name="message"
                   placeholder="Message"
-                  value={formData.message}
+                  value={formData?.message}
                   onChange={handleChange}
                   className="w-full p-2 resize-none border mb-2 mt-3 rounded-md"
                 />
@@ -200,7 +198,7 @@ const SingleProject = () => {
                   type="text"
                   name="name"
                   placeholder="Name (required)"
-                  value={formData.name}
+                  value={formData?.name}
                   onChange={handleChange}
                   className="w-full p-2 border mb-2 rounded-md"
                 />
@@ -208,7 +206,7 @@ const SingleProject = () => {
                   type="email"
                   name="email"
                   placeholder="Email address (required)"
-                  value={formData.email}
+                  value={formData?.email}
                   onChange={handleChange}
                   className="w-full p-2 border mb-2 rounded-md"
                 />
@@ -216,7 +214,7 @@ const SingleProject = () => {
                   type="tel"
                   name="phone"
                   placeholder="Phone number"
-                  value={formData.phone}
+                  value={formData?.phone}
                   onChange={handleChange}
                   className="w-full p-2 border mb-2 rounded-md"
                 />
@@ -232,21 +230,20 @@ const SingleProject = () => {
             </div>
           </div>
 
-          {/* Contact Section */}
           <div className="lg:col-span-4">
             <div className="sticky top-20">
               <div className="bg-white rounded-lg shadow-md p-6">
                 <div className="flex items-center gap-2">
                   <div>
                     <h2 className="text-xl font-semibold">
-                      {responseData?.data?.title}
+                      {responseData?.data?.title || "No Title"}
                     </h2>
                     <h2 className="text-lg">
-                      {responseData?.data?.developerId?.companyName}
+                      {responseData?.data?.developerId?.companyName || "No Company"}
                     </h2>
                   </div>
                   <img
-                    src={responseData?.data?.images[0]}
+                    src={responseData?.data?.images?.[0] || "default-image-url"}
                     alt="Agency"
                     className="w-16 h-16 rounded-xl mx-auto"
                   />

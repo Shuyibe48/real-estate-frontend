@@ -6,6 +6,7 @@ import {
   ArrowBigUpDash,
   ArrowLeftRight,
   BadgeDollarSign,
+  Blinds,
   BookCheck,
   BrainCircuit,
   BrickWall,
@@ -34,6 +35,8 @@ import {
   Monitor,
   RotateCcw,
   ScanEye,
+  Search,
+  ServerOff,
   Settings,
   Shell,
   ShieldAlert,
@@ -55,6 +58,7 @@ import {
   MdUpdate,
 } from "react-icons/md";
 import { useState } from "react";
+import { setOptions } from "leaflet";
 
 const AdminMenu = () => {
   const [showProjects, setShowProjects] = useState(false);
@@ -70,11 +74,11 @@ const AdminMenu = () => {
 
   return (
     <div>
-      <DashboardSidebarMenu
+      {/* <DashboardSidebarMenu
         icon={MdDashboard}
         label="Dashboard"
         href="/dashboard/dashboard-overview"
-      />
+      /> */}
       {/* project */}
       <button
         onClick={() => setShowProjects((prev) => !prev)}
@@ -129,7 +133,7 @@ const AdminMenu = () => {
       )}
 
       {/* project */}
-      <button
+      {/* <button
         onClick={() => setShowRolesAndPermission((prev) => !prev)}
         className="flex w-full items-center justify-between px-8 py-3 text-[#333537]"
       >
@@ -144,9 +148,9 @@ const AdminMenu = () => {
         ) : (
           <ChevronDown className="h-4 w-4" />
         )}
-      </button>
+      </button> */}
       {/* project list */}
-      {showRolesAndPermission && (
+      {/* {showRolesAndPermission && (
         <div className="ps-2">
           <DashboardSidebarMenu
             icon={Cross}
@@ -159,7 +163,7 @@ const AdminMenu = () => {
             href="/dashboard/roles-permission"
           />
         </div>
-      )}
+      )} */}
 
       {/* project */}
       <button
@@ -200,7 +204,7 @@ const AdminMenu = () => {
       )}
 
       {/* project */}
-      <button
+      {/* <button
         onClick={() => setShowPayment((prev) => !prev)}
         className="flex w-full items-center justify-between px-8 py-3 text-[#333537]"
       >
@@ -215,9 +219,9 @@ const AdminMenu = () => {
         ) : (
           <ChevronDown className="h-4 w-4" />
         )}
-      </button>
+      </button> */}
       {/* project list */}
-      {showPayment && (
+      {/* {showPayment && (
         <div className="ps-2">
           <DashboardSidebarMenu
             icon={ArrowLeftRight}
@@ -230,7 +234,7 @@ const AdminMenu = () => {
             href="/dashboard/integration-payment-system"
           />
         </div>
-      )}
+      )} */}
 
       {/* project */}
       <button
@@ -266,7 +270,7 @@ const AdminMenu = () => {
       )}
 
       {/* project */}
-      <button
+      {/* <button
         onClick={() => setShowPlan((prev) => !prev)}
         className="flex w-full items-center justify-between px-8 py-3 text-[#333537]"
       >
@@ -281,22 +285,22 @@ const AdminMenu = () => {
         ) : (
           <ChevronDown className="h-4 w-4" />
         )}
-      </button>
+      </button> */}
       {/* project list */}
-      {showPlan && (
+      {/* {showPlan && (
         <div className="ps-2">
           <DashboardSidebarMenu
             icon={Megaphone}
-            label="Integrated advertising"
+            label="Manage promotion"
             href="/dashboard/plan"
           />
           <DashboardSidebarMenu
             icon={Monitor}
-            label="Monitor Ads"
-            href="/dashboard/plan"
+            label="Integrated advertising"
+            href="/dashboard/advertising"
           />
         </div>
-      )}
+      )} */}
       {/* project */}
       <button
         onClick={() => setShowDeveloper((prev) => !prev)}
@@ -306,7 +310,7 @@ const AdminMenu = () => {
           <span>
             <Container className="h-4 w-4" />
           </span>
-          <span>Developer Property</span>
+          <span>Developer Project</span>
         </span>
         {showDeveloper ? (
           <ChevronUp className="h-4 w-4" />
@@ -320,17 +324,20 @@ const AdminMenu = () => {
           <DashboardSidebarMenu
             icon={ShieldCheck}
             label="Project verification"
-            href="/dashboard/plan"
+            href="/dashboard/project-management"
           />
-          <DashboardSidebarMenu
+          {/* <DashboardSidebarMenu
             icon={ChartBar}
             label="Project statistics"
             href="/dashboard/plan"
-          />
+          /> */}
         </div>
       )}
+
+      {/* <DashboardSidebarMenu icon={Search} label="SEO Management" href="/dashboard/seo" /> */}
+      {/* <DashboardSidebarMenu icon={Blinds} label="Blog" href="/dashboard/Blog" /> */}
       {/* project */}
-      <button
+      {/* <button
         onClick={() => setShowSettings((prev) => !prev)}
         className="flex w-full items-center justify-between px-8 py-3 text-[#333537]"
       >
@@ -345,20 +352,20 @@ const AdminMenu = () => {
         ) : (
           <ChevronDown className="h-4 w-4" />
         )}
-      </button>
+      </button> */}
       {/* project list */}
       {showSettings && (
         <div className="ps-2">
-          <DashboardSidebarMenu
+          {/* <DashboardSidebarMenu
             icon={LayoutTemplate}
             label="Platform configuration"
             href="/dashboard/platform-configuration"
-          />
-          <DashboardSidebarMenu
+          /> */}
+          {/* <DashboardSidebarMenu
             icon={ShieldAlert}
             label="Security"
             href="/dashboard/security"
-          />
+          /> */}
           {/* <DashboardSidebarMenu
             icon={DatabaseBackup}
             label="Backup and restore"
@@ -399,7 +406,7 @@ const AdminMenu = () => {
         </div>
       )} */}
       {/* project */}
-      <button
+      {/* <button
         onClick={() => setShowSupport((prev) => !prev)}
         className="flex w-full items-center justify-between px-8 py-3 text-[#333537]"
       >
@@ -414,9 +421,9 @@ const AdminMenu = () => {
         ) : (
           <ChevronDown className="h-4 w-4" />
         )}
-      </button>
+      </button> */}
       {/* project list */}
-      {showSupport && (
+      {/* {showSupport && (
         <div className="ps-2">
           <DashboardSidebarMenu
             icon={Tickets}
@@ -429,7 +436,7 @@ const AdminMenu = () => {
             href="/dashboard/plan"
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

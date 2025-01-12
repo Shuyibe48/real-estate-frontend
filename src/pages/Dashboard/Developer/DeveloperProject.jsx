@@ -23,9 +23,8 @@ import { Link, useParams } from "react-router-dom";
 import DeveloperActionModal from "../../../components/Modal/DeveloperActionModal";
 import { CiSearch } from "react-icons/ci";
 
-const Projects = () => {
+const DeveloperProject = (id) => {
   const { user } = useContext(AuthContext);
-  const { id } = useParams();
   const [actions, setActions] = useState("approved");
   const [isOpen, setIsOpen] = useState(false);
   const [action, setAction] = useState("");
@@ -113,45 +112,46 @@ const Projects = () => {
             product?.blocked === false
           );
         }
-        // No return statement here to avoid filtering all projects by default
+        // Default return if no conditions match
+        return true;
       })
     : []; // Default to empty array if projects is not an array
 
   // Filter based on the true condition
-  // const filteredProject = responseData?.data?.projects.filter((product) => {
-  //   if (approved) {
-  //     return (
-  //       (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-  //         product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())) &&
-  //       product?.approved === true
-  //     );
-  //   }
-  //   if (reject) {
-  //     return (
-  //       (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-  //         product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())) &&
-  //       product?.reject === true
-  //     );
-  //   }
-  //   if (block) {
-  //     return (
-  //       (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-  //         product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())) &&
-  //       product?.blocked === true
-  //     );
-  //   }
-  //   if (pending) {
-  //     return (
-  //       (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-  //         product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())) &&
-  //       product?.approved === false &&
-  //       product?.reject === false &&
-  //       product?.blocked === false
-  //     );
-  //   }
-  //   // Default return if no conditions match
-  //   return true;
-  // });
+  //   const filteredProject = responseData?.data?.projects.filter((product) => {
+  //     if (approved) {
+  //       return (
+  //         (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+  //           product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())) &&
+  //         product?.approved === true
+  //       );
+  //     }
+  //     if (reject) {
+  //       return (
+  //         (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+  //           product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())) &&
+  //         product?.reject === true
+  //       );
+  //     }
+  //     if (block) {
+  //       return (
+  //         (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+  //           product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())) &&
+  //         product?.blocked === true
+  //       );
+  //     }
+  //     if (pending) {
+  //       return (
+  //         (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+  //           product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())) &&
+  //         product?.approved === false &&
+  //         product?.reject === false &&
+  //         product?.blocked === false
+  //       );
+  //     }
+  //     // Default return if no conditions match
+  //     return true;
+  //   });
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -213,7 +213,7 @@ const Projects = () => {
   return (
     <div className="mt-10">
       <Container>
-        <div className="mb-6 flex items-center justify-between border-b pb-2">
+        {/* <div className="mb-6 flex items-center justify-between border-b pb-2">
           <h1 className="text-xl font-semibold">Projects</h1>
           <div className="flex justify-center items-center relative text-sm w-full sm:w-auto">
             <input
@@ -237,7 +237,7 @@ const Projects = () => {
             <option value={"reject"}>Reject</option>
             <option value={"block"}>Blocked</option>
           </select>
-        </div>
+        </div> */}
         {filteredProject.length > 0 ? (
           <div>
             {filteredProject?.map((project) => (
@@ -268,7 +268,7 @@ const Projects = () => {
                         <div>
                           <span
                             onClick={() => setActionOpen(true)}
-                            className="bg-rose-300 px-2 rounded-md text-white cursor-pointer"
+                            className="bg-rose-300 hidden px-2 rounded-md text-white cursor-pointer"
                           >
                             Action
                           </span>
@@ -308,7 +308,7 @@ const Projects = () => {
                                   </span>
                                 </div>
                               )}
-                              {(user?.userId?.role === "4" ||
+                              {(user?.userId?.role === "5" ||
                                 user?.userId?.role === "3") && (
                                 <div className="flex flex-col gap-1 mt-1">
                                   {!project?.approved ? (
@@ -334,9 +334,7 @@ const Projects = () => {
                                         )
                                       }
                                     >
-                                      <span
-                                        className={`flex items-center gap-1 cursor-pointer`}
-                                      >
+                                      <span className="flex items-center gap-1 cursor-pointer">
                                         <Shield className="w-4 h-4" />
                                         <span>Pending</span>
                                       </span>
@@ -436,4 +434,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default DeveloperProject;

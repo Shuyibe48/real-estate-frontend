@@ -50,3 +50,11 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:active {
   background-color: #f43f5d9d; /* Thumb color when active */
 }
+
+
+.card {
+  background: linear-gradient(to top, black, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+}

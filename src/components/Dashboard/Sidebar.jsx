@@ -44,8 +44,8 @@ const Sidebar = () => {
 
   return (
     <div className={sidebarClassNames}>
-      <div className="flex w-full flex-col justify-start">
-        <div className="z-50 flex min-h-[56px] w-64 items-center justify-between px-6 pt-3">
+      <div className="flex w-full flex-col justify-start mb-8">
+        <div className="z-50 mb-8 flex min-h-[56px] w-64 items-center justify-between px-6 pt-3">
           <Logo />
           <button
             className="py-3"
@@ -55,7 +55,7 @@ const Sidebar = () => {
           </button>
         </div>
 
-        <div className="flex items-center gap-5 px-8 py-4">
+        {/* <div className="flex items-center gap-5 px-8 py-4">
           <div>
             <h3 className="text-md font-semibold">
               {(() => {
@@ -80,7 +80,7 @@ const Sidebar = () => {
               <p className="text-xs text-gray-500">{user?.id}</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Navbar links */}
         <nav className="z-10 w-full">{role === "1" && <BuyerMenu />}</nav>

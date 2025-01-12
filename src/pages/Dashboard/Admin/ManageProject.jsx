@@ -23,9 +23,8 @@ import { Link, useParams } from "react-router-dom";
 import DeveloperActionModal from "../../../components/Modal/DeveloperActionModal";
 import { CiSearch } from "react-icons/ci";
 
-const Projects = () => {
+const ManageProject = () => {
   const { user } = useContext(AuthContext);
-  const { id } = useParams();
   const [actions, setActions] = useState("approved");
   const [isOpen, setIsOpen] = useState(false);
   const [action, setAction] = useState("");
@@ -42,10 +41,10 @@ const Projects = () => {
     refetch,
     error,
   } = useQuery({
-    queryKey: ["developers"],
+    queryKey: ["projects"],
     queryFn: async ({ queryKey }) => {
       const [_key] = queryKey;
-      const { data } = await baseUrl.get(`/developers/${id}`);
+      const { data } = await baseUrl.get(`/projects/get-projects`);
       return data;
     },
   });
@@ -72,53 +71,36 @@ const Projects = () => {
     pending = true;
   }
 
-  const filteredProject = Array.isArray(responseData?.data?.projects)
-    ? responseData?.data?.projects.filter((product) => {
+  const filteredProject = Array.isArray(responseData?.data)
+    ? responseData?.data.filter((product) => {
+        const matchesSearchTerm =
+          product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+          product?.title?.toLowerCase().includes(searchTerm?.toLowerCase());
+
         if (approved) {
-          return (
-            (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-              product?.title
-                ?.toLowerCase()
-                .includes(searchTerm?.toLowerCase())) &&
-            product?.approved === true &&
-            product?.blocked === false
-          );
+          return matchesSearchTerm && product?.approved === true && product?.blocked === false;
         }
         if (reject) {
-          return (
-            (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-              product?.title
-                ?.toLowerCase()
-                .includes(searchTerm?.toLowerCase())) &&
-            product?.reject === true
-          );
+          return matchesSearchTerm && product?.reject === true;
         }
         if (block) {
-          return (
-            (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-              product?.title
-                ?.toLowerCase()
-                .includes(searchTerm?.toLowerCase())) &&
-            product?.blocked === true
-          );
+          return matchesSearchTerm && product?.blocked === true;
         }
         if (pending) {
           return (
-            (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-              product?.title
-                ?.toLowerCase()
-                .includes(searchTerm?.toLowerCase())) &&
-            product?.approved === false &&
-            product?.reject === false &&
-            product?.blocked === false
+            matchesSearchTerm &&
+            !product?.approved &&
+            !product?.reject &&
+            !product?.blocked
           );
         }
-        // No return statement here to avoid filtering all projects by default
+        // If no filter criteria is set, return false to exclude the product
+        return false;
       })
-    : []; // Default to empty array if projects is not an array
+    : []; // Default to an empty array if data is not an array
 
   // Filter based on the true condition
-  // const filteredProject = responseData?.data?.projects.filter((product) => {
+  // const filteredProject = responseData?.data?.filter((product) => {
   //   if (approved) {
   //     return (
   //       (product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
@@ -214,7 +196,7 @@ const Projects = () => {
     <div className="mt-10">
       <Container>
         <div className="mb-6 flex items-center justify-between border-b pb-2">
-          <h1 className="text-xl font-semibold">Projects</h1>
+          <h1 className="text-xl font-semibold">Projects Management</h1>
           <div className="flex justify-center items-center relative text-sm w-full sm:w-auto">
             <input
               type="text"
@@ -308,11 +290,14 @@ const Projects = () => {
                                   </span>
                                 </div>
                               )}
-                              {(user?.userId?.role === "4" ||
+                              {(user?.userId?.role === "5" ||
                                 user?.userId?.role === "3") && (
                                 <div className="flex flex-col gap-1 mt-1">
                                   {!project?.approved ? (
                                     <span
+                                      className={`${
+                                        project?.reject === true && "hidden"
+                                      }`}
                                       onClick={() =>
                                         openModalHandler(
                                           project?._id,
@@ -327,6 +312,9 @@ const Projects = () => {
                                     </span>
                                   ) : (
                                     <span
+                                      className={`${
+                                        project?.approved === true && "hidden"
+                                      }`}
                                       onClick={() =>
                                         openModalHandler(
                                           project?._id,
@@ -334,9 +322,7 @@ const Projects = () => {
                                         )
                                       }
                                     >
-                                      <span
-                                        className={`flex items-center gap-1 cursor-pointer`}
-                                      >
+                                      <span className="flex items-center gap-1 cursor-pointer">
                                         <Shield className="w-4 h-4" />
                                         <span>Pending</span>
                                       </span>
@@ -344,6 +330,9 @@ const Projects = () => {
                                   )}
                                   {!project?.reject ? (
                                     <span
+                                      className={`${
+                                        project?.approved === true && "hidden"
+                                      }`}
                                       onClick={() =>
                                         openModalHandler(project?._id, "reject")
                                       }
@@ -378,6 +367,9 @@ const Projects = () => {
                                     </span>
                                   ) : (
                                     <span
+                                      className={`${
+                                        (project?.reject === true || project?.approved === false) &&  "hidden"
+                                      }`}
                                       onClick={() =>
                                         openModalHandler(project?._id, "block")
                                       }
@@ -436,4 +428,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default ManageProject;
