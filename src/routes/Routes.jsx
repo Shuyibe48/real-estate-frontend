@@ -69,8 +69,8 @@ import SingleBlog from "../pages/Dashboard/Admin/SingleBlog";
 import FindDeveloper from "../pages/Dashboard/Admin/FindDeveloper";
 import SingleDeveloper from "../pages/Dashboard/Admin/SingleDeveloper";
 import ManageProject from "../pages/Dashboard/Admin/ManageProject";
-import Seo from "../pages/Dashboard/Admin/seo";
 import AdCampaignDashboard from "../pages/Dashboard/Admin/AdCampaignDashboard";
+import Seo from "../pages/Dashboard/Admin/Seo";
 
 export const router = createBrowserRouter([
   {
