@@ -240,7 +240,7 @@ import baseUrl from "../../../api/baseUrl.js";
 import { FaMapLocation } from "react-icons/fa6";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import Loader from "../../../components/Shared/Loader.jsx";
-import PromotedList from "./PromotedList.jsx";
+import Promotion from "../../Dashboard/Admin/Promotion.jsx";
 
 const Listings = () => {
   const { searchContent } = useContext(AuthContext);
@@ -438,7 +438,7 @@ const Listings = () => {
           {/* Promotion Section */}
           <div className="col-span-4 h-full pt-6 sticky top-0">
             <div className="mb-8">
-              <PromotedList />
+              <Promotion />
             </div>
           </div>
         </div>
