@@ -65,7 +65,7 @@ const PlatformConfiguration = () => {
             <img
               src={platformsLogo[0] || logo}
               alt="Logo"
-              className="image-preview h-[100px]"
+              className="image-preview h-[60px] w-[150px]"
             />
             {editLogo ? (
               <UploadWidget
@@ -92,7 +92,7 @@ const PlatformConfiguration = () => {
             <img
               src={platformsBanner[0] || banner}
               alt="Banner"
-              className="image-preview h-400px w-3/4"
+              className="image-preview h-[200px] w-[400px]"
             />
             {editBanner ? (
               <UploadWidget
@@ -121,7 +121,7 @@ const PlatformConfiguration = () => {
             <img
               src={platformsBanner[0] || developerBanner}
               alt="Banner"
-              className="image-preview h-400px w-3/4"
+              className="image-preview h-[200px] w-[400px]"
             />
             {editDeveloperBanner ? (
               <UploadWidget

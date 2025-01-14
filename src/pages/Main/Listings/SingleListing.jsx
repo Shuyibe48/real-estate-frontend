@@ -426,13 +426,6 @@ const SingleListing = () => {
                   )}
                 </div>
               </div>
-
-              <div className="mt-20">
-                <h1 className="font-semibold text-gray-500 mb-6">
-                  PROMOTED PROPERTIES
-                </h1>
-                {/* <PromotedList /> */}
-              </div>
             </div>
           </div>
         </div>

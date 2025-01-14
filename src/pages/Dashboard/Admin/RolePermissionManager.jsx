@@ -15,9 +15,9 @@ const permissionsList = [
 // Initial role permissions
 const initialPermissions = {
   moderator: {},
-  buyer: {},
-  agent: {},
-  developer: {},
+  // buyer: {},
+  // agent: {},
+  // developer: {},
 };
 
 const RolePermissionManager = () => {

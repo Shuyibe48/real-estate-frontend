@@ -19,13 +19,13 @@ const PaymentIntegrationComponent = () => {
     e.preventDefault();
     const integrationData = {
       paymentMethod,
-      apiKey: paymentMethod === "Bank Transfer" ? null : apiKey,
-      clientId: paymentMethod === "Bank Transfer" ? null : clientId,
-      bankDetails: paymentMethod === "Bank Transfer" ? bankDetails : null,
+      apiKey: paymentMethod === "Bank" ? null : apiKey,
+      clientId: paymentMethod === "Bank" ? null : clientId,
+      bankDetails: paymentMethod === "Bank" ? bankDetails : null,
     };
 
     console.log("Submitted Integration Data: ", integrationData);
-    alert("Payment system integrated successfully!");
+    alert(`Please authorize your ${integrationData?.paymentMethod} account with your domain!`);
   };
 
   return (
@@ -41,7 +41,7 @@ const PaymentIntegrationComponent = () => {
           >
             <option value="Stripe">Stripe</option>
             <option value="PayPal">PayPal</option>
-            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Bank">Bank Transfer</option>
           </select>
         </div>
 
@@ -73,7 +73,7 @@ const PaymentIntegrationComponent = () => {
           </div>
         )}
 
-        {paymentMethod === "Bank Transfer" && (
+        {paymentMethod === "Bank" && (
           <>
             <div className="mb-4">
               <label className="block font-semibold mb-2">Account Name</label>

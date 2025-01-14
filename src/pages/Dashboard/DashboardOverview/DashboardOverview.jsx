@@ -56,7 +56,7 @@ const DashboardOverview = () => {
       const properties = await baseUrl.get("/properties/get-properties");
       const payments = await baseUrl.get("/payments/get-payments");
       const totalCompletePayments = payments?.data?.data?.filter(
-        (payment) => payment?.paymentStatus === "completed"
+        (payment) => payment?.paymentStatus === "completed" || payment?.paymentStatus === "pending"
       )
       setListings(properties?.data?.data);
       setRevenueData(totalCompletePayments);
