@@ -10,7 +10,7 @@ const LandingLayout = () => {
       <main className="flex w-full flex-col">
         <Navbar />
         <Outlet />
-        <Footer />
+        {/* <Footer /> */}
       </main>
     </div>
   );
