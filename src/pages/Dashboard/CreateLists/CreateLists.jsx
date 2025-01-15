@@ -718,7 +718,7 @@ const CreateLists = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-1">
+                  {/* <div className="space-y-1">
                     <label htmlFor="video" className="block font-semibold">
                       Video Link
                     </label>
@@ -729,7 +729,7 @@ const CreateLists = () => {
                       type="text"
                       placeholder="Paste your property video link"
                     />
-                  </div>
+                  </div> */}
 
                   {/* Sale Method */}
                   {selectedType === "buy" && (
