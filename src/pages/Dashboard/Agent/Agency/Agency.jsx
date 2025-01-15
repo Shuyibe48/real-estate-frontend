@@ -709,7 +709,7 @@ const Agency = () => {
                     </button>
                   </div>
                 </div>
-
+{/* 
                 <div className="space-y-4 my-4 bg-white p-4 rounded-md shadow-md">
                   <div>
                     <h1 className="font-semibold text-lg">
@@ -803,7 +803,7 @@ const Agency = () => {
                       Show more reviews
                     </span>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="space-y-2 my-4 bg-white rounded-md shadow-md">
                   <div>
