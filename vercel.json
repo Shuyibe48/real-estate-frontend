@@ -1,9 +1,8 @@
 {
-    "rewrites": [
-      {
-        "source": "/api/v1/(.*)",
-        "destination": "http://188.212.103.227:5000/api/v1/$1"
-      }
-    ]
-  }
-  
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
