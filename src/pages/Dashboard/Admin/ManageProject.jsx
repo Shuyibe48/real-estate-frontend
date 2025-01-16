@@ -31,7 +31,7 @@ const ManageProject = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [projectId, setProjectId] = useState("");
   const [entries, setEntries] = useState("approved");
-  const [actionOpen, setActionOpen] = useState(false);
+  const [actionOpen, setActionOpen] = useState({});
 
   const {
     data: responseData = {
@@ -78,7 +78,11 @@ const ManageProject = () => {
           product?.title?.toLowerCase().includes(searchTerm?.toLowerCase());
 
         if (approved) {
-          return matchesSearchTerm && product?.approved === true && product?.blocked === false;
+          return (
+            matchesSearchTerm &&
+            product?.approved === true &&
+            product?.blocked === false
+          );
         }
         if (reject) {
           return matchesSearchTerm && product?.reject === true;
@@ -153,6 +157,13 @@ const ManageProject = () => {
     setIsOpen(false);
   };
 
+  const toggleActionOpen = (id) => {
+    setActionOpen((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   const modalHandler = async (action, id) => {
     // Validate action and id
     if (!["approved", "reject", "block", "delete"].includes(action) || !id) {
@@ -221,7 +232,7 @@ const ManageProject = () => {
           </select>
         </div>
         {filteredProject.length > 0 ? (
-          <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredProject?.map((project) => (
               <div
                 className="shadow-md w-[260px] rounded-xl overflow-hidden relative"
@@ -249,7 +260,7 @@ const ManageProject = () => {
 
                         <div>
                           <span
-                            onClick={() => setActionOpen(true)}
+                            onClick={() => toggleActionOpen(project?._id)}
                             className="bg-rose-300 px-2 rounded-md text-white cursor-pointer"
                           >
                             Action
@@ -257,12 +268,12 @@ const ManageProject = () => {
 
                           <div
                             className={`absolute inset-0 flex flex-col items-start justify-start gap-10 bg-orange-50 p-2 rounded-md ml-[80px] ${
-                              actionOpen ? "" : "hidden"
+                              actionOpen[project?._id] ? "" : "hidden"
                             }`}
                           >
                             <div
                               className="cursor-pointer"
-                              onClick={() => setActionOpen(false)}
+                              onClick={() => toggleActionOpen(project?._id)}
                             >
                               <X className="w-4 h-4" />
                             </div>
@@ -368,7 +379,9 @@ const ManageProject = () => {
                                   ) : (
                                     <span
                                       className={`${
-                                        (project?.reject === true || project?.approved === false) &&  "hidden"
+                                        (project?.reject === true ||
+                                          project?.approved === false) &&
+                                        "hidden"
                                       }`}
                                       onClick={() =>
                                         openModalHandler(project?._id, "block")

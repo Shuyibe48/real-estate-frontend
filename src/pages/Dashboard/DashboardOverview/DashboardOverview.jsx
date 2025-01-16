@@ -56,14 +56,17 @@ const DashboardOverview = () => {
       const properties = await baseUrl.get("/properties/get-properties");
       const payments = await baseUrl.get("/payments/get-payments");
       const totalCompletePayments = payments?.data?.data?.filter(
-        (payment) => payment?.paymentStatus === "completed" || payment?.paymentStatus === "pending"
-      )
+        (payment) =>
+          payment?.paymentStatus === "completed" ||
+          payment?.paymentStatus === "pending"
+      );
       setListings(properties?.data?.data);
       setRevenueData(totalCompletePayments);
+      console.log(buyers?.data?.data?.total);
       setUsers({
-        owners: agents?.data?.data?.length,
-        agents: buyers?.data?.data?.length,
-        buyers: properties?.data?.data?.length,
+        owners: buyers?.data?.data?.length,
+        agents: agents?.data?.data?.length,
+        buyers: buyers?.data?.data?.total,
       });
     };
 
@@ -91,18 +94,29 @@ const DashboardOverview = () => {
     },
   ];
 
-  const totalActiveListings = listings?.filter(
-    (listing) => listing?.approved === true && listing?.blocked === false
-  ).length;
+  // const totalActiveListings = listings?.filter(
+  //   (listing) => listing?.approved === true && listing?.blocked === false
+  // ).length;
+  const totalActiveListings = Array.isArray(listings)
+    ? listings.filter(
+        (listing) => listing?.approved === true && listing?.blocked === false
+      ).length
+    : 0;
 
-  const totalInactiveListings = listings.filter(
-    (listing) =>
-      listing?.approved === false ||
-      listing?.blocked === true ||
-      listing?.reject === true
-  ).length;
-
-  console.log(revenueData);
+  // const totalInactiveListings = listings.filter(
+  //   (listing) =>
+  //     listing?.approved === false ||
+  //     listing?.blocked === true ||
+  //     listing?.reject === true
+  // ).length;
+  const totalInactiveListings = Array.isArray(listings)
+    ? listings.filter(
+        (listing) =>
+          listing?.approved === false ||
+          listing?.blocked === true ||
+          listing?.reject === true
+      ).length
+    : 0;
 
   const revenueByMonth = getMonthlyData(revenueData, "createdAt");
 

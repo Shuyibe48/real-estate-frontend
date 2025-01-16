@@ -17,12 +17,7 @@ const AgenciesCard = ({ agency }) => {
           <div className="mb-2">
             <h3 className="text-lg font-semibold">{agency.name}</h3>
             <p className="">{agency.address}</p>
-            <div className="flex items-center mt-4 text-yellow-500">
-              ⭐ <b>5.0</b>{" "}
-              <span className="ml-1 text-gray-500">(1396 reviews)</span>
-            </div>
-            <p className="text-gray-500">405 reviews in last 12 months</p>
-
+           
             {/* Tags */}
             <div className="flex flex-wrap gap-3 mt-6">
               <span className="bg-gray-100 text-gray-800 py-2 px-4 rounded-full text-sm">

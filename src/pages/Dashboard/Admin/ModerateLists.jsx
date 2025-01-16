@@ -67,6 +67,7 @@ const ModerateLists = () => {
   if (isLoading) return <Loader />;
   if (error) return "An error has occurred: " + error.message;
 
+
   // Edit Modal Handler
   const handleOpenEditModal = (product) => {
     setSelectedProduct(product); // Pass the selected product
@@ -135,12 +136,23 @@ const ModerateLists = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProduct = responseData?.data?.filter(
-    (product) =>
-      product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
-      product?.approved === false &&
-      product?.reject === action
-  );
+  // const filteredProduct = responseData?.data?.filter(
+  //   (product) =>
+  //     product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+  //     product?.approved === false &&
+  //     product?.reject === action
+  // );
+  const filteredProduct = Array.isArray(responseData?.data) 
+  ? responseData?.data?.filter(
+      (product) =>
+        product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+        product?.approved === false &&
+        product?.reject === action
+    )
+  : [];
+
+  console.log(responseData?.data);
+
 
   return (
     <div className="mt-8">

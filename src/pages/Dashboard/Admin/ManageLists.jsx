@@ -143,12 +143,20 @@ const ModerateLists = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProduct = responseData?.data?.filter(
-    (product) =>
-      product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
-      product?.approved === true &&
-      product?.blocked === action
-  );
+  // const filteredProduct = responseData?.data?.filter(
+  //   (product) =>
+  //     product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+  //     product?.approved === true &&
+  //     product?.blocked === action
+  // );
+  const filteredProduct = Array.isArray(responseData?.data)
+    ? responseData.data.filter(
+        (product) =>
+          product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+          product?.approved === true &&
+          product?.blocked === action
+      )
+    : [];
 
   return (
     <div className="mt-8">
@@ -300,7 +308,9 @@ const ModerateLists = () => {
 
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <div className="flex items-center gap-2">
-                            <Link to={`/dashboard/update-property/${user?._id}`}>
+                            <Link
+                              to={`/dashboard/update-property/${user?._id}`}
+                            >
                               <span className="text-[#99A1B7] hover:text-blue-500 transition duration-150 cursor-pointer">
                                 <CiViewTable size={18} />
                               </span>

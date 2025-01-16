@@ -32,7 +32,7 @@ const Projects = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [projectId, setProjectId] = useState("");
   const [entries, setEntries] = useState("approved");
-  const [actionOpen, setActionOpen] = useState(false);
+  const [actionOpen, setActionOpen] = useState({});
 
   const {
     data: responseData = {
@@ -71,6 +71,13 @@ const Projects = () => {
   } else if (entries === "pending") {
     pending = true;
   }
+
+  const toggleActionOpen = (id) => {
+    setActionOpen((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const filteredProject = Array.isArray(responseData?.data?.projects)
     ? responseData?.data?.projects.filter((product) => {
@@ -239,7 +246,7 @@ const Projects = () => {
           </select>
         </div>
         {filteredProject.length > 0 ? (
-          <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredProject?.map((project) => (
               <div
                 className="shadow-md w-[260px] rounded-xl overflow-hidden relative"
@@ -267,7 +274,7 @@ const Projects = () => {
 
                         <div>
                           <span
-                            onClick={() => setActionOpen(true)}
+                            onClick={() => toggleActionOpen(project?._id)}
                             className="bg-rose-300 px-2 rounded-md text-white cursor-pointer"
                           >
                             Action
@@ -275,12 +282,12 @@ const Projects = () => {
 
                           <div
                             className={`absolute inset-0 flex flex-col items-start justify-start gap-10 bg-orange-50 p-2 rounded-md ml-[80px] ${
-                              actionOpen ? "" : "hidden"
+                              actionOpen[project?._id] ? "" : "hidden"
                             }`}
                           >
                             <div
                               className="cursor-pointer"
-                              onClick={() => setActionOpen(false)}
+                              onClick={() => toggleActionOpen(project?._id)}
                             >
                               <X className="w-4 h-4" />
                             </div>

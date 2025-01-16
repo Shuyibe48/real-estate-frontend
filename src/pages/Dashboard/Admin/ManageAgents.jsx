@@ -136,13 +136,20 @@ const ManageAgents = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProduct = responseData?.data.filter(
-    (product) =>
-      product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
-      product?.blocked === blocked
-  );
+  // const filteredProduct = responseData?.data.filter(
+  //   (product) =>
+  //     product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+  //     product?.blocked === blocked
+  // );
+  const filteredProduct = Array.isArray(responseData?.data)
+  ? responseData.data.filter(
+      (product) =>
+        typeof product?.id === "string" && 
+        product.id.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+        product?.blocked === blocked
+    )
+  : [];
 
-  console.log(filteredProduct);
 
   return (
     <div className="mt-8">

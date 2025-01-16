@@ -57,8 +57,9 @@ import {
   MdPermIdentity,
   MdUpdate,
 } from "react-icons/md";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { setOptions } from "leaflet";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const AdminMenu = () => {
   const [showProjects, setShowProjects] = useState(false);
@@ -71,14 +72,15 @@ const AdminMenu = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
+  const { user } = useContext(AuthContext);
 
   return (
     <div>
-      {/* <DashboardSidebarMenu
+      <DashboardSidebarMenu
         icon={MdDashboard}
         label="Dashboard"
         href="/dashboard/dashboard-overview"
-      /> */}
+      />
       {/* project */}
       <button
         onClick={() => setShowProjects((prev) => !prev)}
@@ -119,11 +121,13 @@ const AdminMenu = () => {
             label="Developers List"
             href="/dashboard/manage-developers"
           />
-          <DashboardSidebarMenu
-            icon={MdAddModerator}
-            label="Moderators List"
-            href="/dashboard/manage-moderators"
-          />
+          {user?.userId?.role === "4" && (
+            <DashboardSidebarMenu
+              icon={MdAddModerator}
+              label="Moderators List"
+              href="/dashboard/manage-moderators"
+            />
+          )}
           <DashboardSidebarMenu
             icon={Layers2}
             label="Manage Agency"

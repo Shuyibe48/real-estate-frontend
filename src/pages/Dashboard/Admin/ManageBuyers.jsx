@@ -51,7 +51,7 @@ const ManageBuyers = () => {
     queryKey: ["users", entries, currentPage],
     queryFn: async ({ queryKey }) => {
       const [_key, entries, currentPage] = queryKey;
-      const { data } = await baseUrl.get(`buyers/get-buyers`, {
+      const { data } = await baseUrl.get(`/buyers/get-buyers`, {
         params: {
           limit: entries,
           page: currentPage,
@@ -120,11 +120,20 @@ const ManageBuyers = () => {
   //   product?.id?.toLowerCase().includes(searchTerm?.toLowerCase())
   // );
 
-  const filteredProduct = responseData?.data.filter(
-    (product) =>
-      product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
-      product?.blocked === blocked
-  );
+  // const filteredProduct = responseData?.data.filter(
+  //   (product) =>
+  //     product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+  //     product?.blocked === blocked
+  // );
+
+  const filteredProduct = Array.isArray(responseData?.data?.data)
+    ? responseData?.data?.data?.filter(
+        (product) =>
+          product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+          product?.blocked === blocked
+      )
+    : [];
+
 
 
   const handleCloseBlockModal = () => {

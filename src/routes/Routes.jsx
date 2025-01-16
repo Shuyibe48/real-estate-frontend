@@ -11,7 +11,6 @@ import Login from "../pages/Login/Login";
 import PrivateRoute from "./PrivateRoute";
 import CreateLists from "../pages/Dashboard/CreateLists/CreateLists";
 import MyLists from "../pages/Dashboard/CreateLists/MyLists";
-import Portfolio from "../pages/Dashboard/Agent/Portfolio/Portfolio";
 import Agency from "../pages/Dashboard/Agent/Agency/Agency";
 import Team from "../pages/Dashboard/Agent/Agency/Team/Team";
 import SinglePortfolio from "../pages/Dashboard/Agent/Portfolio/SinglePortfolio";
@@ -71,6 +70,7 @@ import SingleDeveloper from "../pages/Dashboard/Admin/SingleDeveloper";
 import ManageProject from "../pages/Dashboard/Admin/ManageProject";
 import AdCampaignDashboard from "../pages/Dashboard/Admin/AdCampaignDashboard";
 import Seo from "../pages/Dashboard/Admin/Seo";
+import Portfolio from "../pages/Main/AgentListings/Portfolio";
 
 export const router = createBrowserRouter([
   {
@@ -203,11 +203,12 @@ export const router = createBrowserRouter([
         loader: ({ params }) => getSingleProperty(params.id),
       },
       {
-        path: "/dashboard/portfolio",
+        path: "/dashboard/portfolio/:id",
         element: <Portfolio />,
+        loader: ({ params }) => getSingleAgent(params.id),
       },
       {
-        path: "/dashboard/portfolio/:id",
+        path: "/dashboard/portfolio/single-portfolio/:id",
         element: <SinglePortfolio />,
         loader: ({ params }) => getAgent(params.id),
       },

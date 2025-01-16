@@ -1,6 +1,26 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const AgentCard = ({ agent }) => {
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalReviews, setTotalReviews] = useState(0);
+
+    useEffect(() => {
+      if (agent?.length > 0) {
+        const total = agent?.reviews?.length;
+        const sumRating = agent?.reviews?.reduce(
+          (sum, review) => sum + review?.rating,
+          0
+        );
+        const avgRating = sumRating / total;
+  
+        setTotalReviews(total);
+        setAverageRating(avgRating.toFixed(1)); // Limiting to one decimal point
+      }
+    }, [agent]);
+
+    console.log(agent);
+
   return (
     <Link to={`/agent/${agent?._id}`}>
       <div className="bg-white shadow-md p-4 rounded-md border">
@@ -16,9 +36,8 @@ const AgentCard = ({ agent }) => {
           <div className="flex-1">
             <h2 className="text-xl font-semibold">{agent?.fullName}</h2>
             <p className="text-yellow-500 ">
-              ⭐<b>5.0</b> (173 reviews)
+              ⭐<b>{averageRating}.0</b> ({totalReviews} reviews)
             </p>
-            <p className="text-gray-500">49 reviews in last 12 months</p>
             <p className="text-gray-600 mt-2">
               Director and Selling Principal <br />
               Gold Coast Property Sales & Rentals

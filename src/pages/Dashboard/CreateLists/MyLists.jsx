@@ -8,6 +8,7 @@ import Loader from "../../../components/Shared/Loader";
 
 const FavoriteProperties = () => {
   const { user } = useContext(AuthContext);
+  const [action, setAction] = useState(false);
 
   // Define the query with useQuery hook
   const {
@@ -34,13 +35,29 @@ const FavoriteProperties = () => {
   if (isLoading) return <Loader />;
   if (error) return "An error has occurred: " + error.message;
 
+  const filteredProduct = Array.isArray(propertiesData)
+  ? propertiesData?.filter(
+      (product) =>
+        product?.approved === !action
+    )
+  : [];
+
   return (
     <div className="mt-6">
       <Container>
         <div>
-          <h1 className="text-2xl font-semibold mb-6">My Lists</h1>
+        <div className="flex justify-between items-center mb-4 pb-4 border-b">
+            <h1 className="text-2xl font-semibold">My Lists</h1>
+            <select
+              className="select select-accent rounded-md font-light bg-[#F9F9F9] outline-none px-2 py-1 w-[120px] text-sm"
+              onChange={(e) => setAction(e.target.value === "true")}
+            >
+              <option value="false">Approved</option>
+              <option value="true">Pending</option>
+            </select>
+          </div>
           <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {propertiesData?.map((property) => (
+            {filteredProduct?.map((property) => (
               <MyListsCard
                 key={property._id}
                 id={property._id}

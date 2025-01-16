@@ -75,6 +75,8 @@ const ManageReviews = () => {
   if (isLoading) return <Loader />;
   if (error) return "An error has occurred: " + error.message;
 
+  console.log(responseData?.data);
+
   // Edit Modal Handler
   const handleOpenEditModal = (product) => {
     setSelectedProduct(product); // Pass the selected product

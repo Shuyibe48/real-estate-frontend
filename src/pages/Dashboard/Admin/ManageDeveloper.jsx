@@ -122,12 +122,19 @@ const ManageDeveloper = () => {
   //   product?.id?.toLowerCase().includes(searchTerm?.toLowerCase())
   // );
 
-  const filteredProduct = responseData?.data.filter(
-    (product) =>
-      product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
-      product?.blocked === blocked
-  );
-
+  // const filteredProduct = responseData?.data.filter(
+  //   (product) =>
+  //     product?.id?.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+  //     product?.blocked === blocked
+  // );
+  const filteredProduct = Array.isArray(responseData?.data)
+    ? responseData.data.filter(
+        (product) =>
+          typeof product?.id === "string" &&
+          product.id.toLowerCase().includes(searchTerm?.toLowerCase()) &&
+          product?.blocked === blocked
+      )
+    : [];
 
   const handleCloseBlockModal = () => {
     setIsBlockModalOpen(false);
@@ -309,7 +316,9 @@ const ManageDeveloper = () => {
                             >
                               <DeleteOutlined size={18} />
                             </span>
-                            <Link to={`/dashboard/developer-profile/${user?._id}`}>
+                            <Link
+                              to={`/dashboard/developer-profile/${user?._id}`}
+                            >
                               <span className="text-[#99A1B7] hover:text-blue-500 transition duration-150 cursor-pointer">
                                 <CiViewTable size={18} />
                               </span>

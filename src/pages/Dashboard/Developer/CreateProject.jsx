@@ -34,7 +34,7 @@ const CreateProject = () => {
           bathrooms: Number(inputs.bathrooms), //
           carSpaces: Number(inputs.carSpaces), //
           price: Number(inputs.price), //
-          description: value, //
+          description: inputs.description, //
           images: images,
           floorPlan: floorPlan,
         },
@@ -43,7 +43,7 @@ const CreateProject = () => {
       console.log(res);
       setLoading(false);
       window.alert("Project created successfully!");
-      navigate(`dashboard/projects`);
+      navigate(`/dashboard/projects/${user?._id}`);
     } catch (error) {
       console.log(error.response.data.message);
       setLoading(false);
@@ -143,7 +143,7 @@ const CreateProject = () => {
                     placeholder="Price"
                   />
                 </div>
-                <div className="space-y-1">
+                {/* <div className="space-y-1">
                   <label htmlFor="description" className="block font-semibold">
                     Description
                   </label>
@@ -153,6 +153,20 @@ const CreateProject = () => {
                       theme="snow"
                       onChange={setValue}
                       value={value}
+                    />
+                  </div>
+                </div> */}
+                <div className="space-y-1">
+                  <label htmlFor="description" className="block font-semibold">
+                    Description
+                  </label>
+                  <div className="block pb-20 sm:pb-10">
+                    <textarea
+                      className="h-32 w-full resize-none px-2 py-2 border rounded-md outline-none"
+                      name="description"
+                      id="description"
+                      placeholder="Description"
+                      required
                     />
                   </div>
                 </div>
@@ -190,7 +204,7 @@ const CreateProject = () => {
                     </div>
                   </div>
                 </div>
-{/* 
+                {/* 
                 <div className="p-2 border rounded-md">
                   <div className="flex justify-between items-center gap-2 my-2 overflow-x-auto custom-scrollbar">
                     {floorPlan && (
@@ -223,7 +237,6 @@ const CreateProject = () => {
                     </div>
                   </div>
                 </div> */}
-                
               </div>
               <button
                 type="submit"

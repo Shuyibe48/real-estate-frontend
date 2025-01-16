@@ -75,12 +75,12 @@ const AppointmentForm = () => {
 
           // যদি সফলভাবে ডাটা পোস্ট হয়
           if (response.status === 200 || response.status === 201) {
-            alert("Data logged in console!");
+            alert("Successfully Done!");
             console.log("Response Data:", response.data);
 
             // বর্তমান ধাপ আপডেট
             setCurrentStep(currentStep + 1);
-            navigate("/");
+            navigate("/dashboard/enquiries");
           } else {
             // ব্যাকএন্ড থেকে অন্য কোনো স্ট্যাটাস রিটার্ন করলে
             alert("Failed to post data. Please try again.");
@@ -88,7 +88,7 @@ const AppointmentForm = () => {
         } catch (error) {
           // ব্যাকএন্ড বা নেটওয়ার্ক এরর হ্যান্ডলিং
           console.error("Error posting data:", error.message);
-          alert("Something went wrong! Please check the console for details.");
+          alert("Something went wrong!");
         }
         return;
       default:

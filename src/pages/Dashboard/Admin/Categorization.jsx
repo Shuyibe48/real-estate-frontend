@@ -218,6 +218,19 @@ const Categorization = () => {
                     >
                       Type
                     </th>
+
+                    <th
+                      scope="col"
+                      className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
+                    >
+                      Views
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
+                    >
+                      Clicks
+                    </th>
                     <th
                       scope="col"
                       className="py-3 bg-[#FDF8F4]  border-b border-gray-100 text-[#99A1B7]  text-left text-sm uppercase font-semibold"
@@ -274,6 +287,16 @@ const Categorization = () => {
                           </span>
                         </td>
 
+                        <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
+                          <span className="font-light text-sm rounded-md">
+                            {user?.views}
+                          </span>
+                        </td>
+                        <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
+                          <span className="font-light text-sm rounded-md">
+                            {user?.clicks}
+                          </span>
+                        </td>
                         <td className="py-2 border-b border-gray-100 bg-[#FDF8F4] text-sm">
                           <span className="font-light text-sm rounded-md">
                             $ {user?.price}

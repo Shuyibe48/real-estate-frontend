@@ -75,7 +75,9 @@ const MenuDropdown = () => {
         {/* User logged-in menu */}
         {user ? (
           <div className="flex items-center relative">
-            {(user?.userId?.role === "1" || user?.userId?.role === "2" || user?.userId?.role === "5" ) && (
+            {(user?.userId?.role === "1" ||
+              user?.userId?.role === "2" ||
+              user?.userId?.role === "5") && (
               <Link
                 to="/inbox"
                 className="hover:bg-gray-100 py-2 px-3 rounded-md transition duration-300 cursor-pointer"
@@ -165,7 +167,7 @@ const MenuDropdown = () => {
                   user.userId.role === "1"
                     ? "/dashboard/profile"
                     : user.userId.role === "2"
-                    ? "/dashboard/portfolio"
+                    ? `/dashboard/portfolio/${user?._id}`
                     : user.userId.role === "3" || user.userId.role === "4"
                     ? "/dashboard/dashboard-overview"
                     : user.userId.role === "5"

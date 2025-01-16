@@ -709,101 +709,8 @@ const Agency = () => {
                     </button>
                   </div>
                 </div>
-{/* 
-                <div className="space-y-4 my-4 bg-white p-4 rounded-md shadow-md">
-                  <div>
-                    <h1 className="font-semibold text-lg">
-                      Our ratings and reviews
-                    </h1>
-                    <p>
-                      Read the latest reviews for the team at Pat O'Driscoll
-                      Real Estate - Rockhampton
-                    </p>
-                  </div>
-                  <div>
-                    <p>
-                      <b>5.0 </b> (226 reviews)
-                    </p>
-                  </div>
 
-                  {/* Tab Menu */}
-                  <div className="flex space-x-4 border-b">
-                    <button
-                      onClick={() => setActiveTabRatings("sellers")}
-                      className={`py-2 px-4 ${
-                        activeTabRatings === "sellers"
-                          ? "text-[#d32f2f] border-b-2 border-[#d32f2f]"
-                          : "text-gray-600"
-                      } font-semibold`}
-                    >
-                      Sellers
-                    </button>
-                    <button
-                      onClick={() => setActiveTabRatings("buyers")}
-                      className={`py-2 px-4 ${
-                        activeTabRatings === "buyers"
-                          ? "text-[#d32f2f] border-b-2 border-[#d32f2f]"
-                          : "text-gray-600"
-                      } font-semibold`}
-                    >
-                      Buyers
-                    </button>
-                  </div>
-
-                  {/* Review Content */}
-                  <div className="space-y-4">
-                    {reviews[activeTabRatings].map((review, index) => (
-                      <div key={index} className="bg-[#F6F5F7] p-4 rounded-md">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-[2]">
-                            <div className="flex items-center mb-2">
-                              <div className="flex text-yellow-500">
-                                {[...Array(5)].map((_, i) => (
-                                  <AiFillStar key={i} />
-                                ))}
-                              </div>
-                              <p className="ml-2 font-semibold text-lg">
-                                {review.rating}
-                              </p>
-                            </div>
-                            <p className="font-semibold text-gray-800 text-base">
-                              Seller of House in {review.location}
-                            </p>
-                            <span className="text-xs text-gray-500">
-                              {review.time}
-                            </span>
-                            <div className="py-4 text-gray-800 text-sm">
-                              <p>
-                                {showMoreRatings
-                                  ? review.review
-                                  : `${review.review.substring(0, 50)}...`}
-                              </p>
-                              <button
-                                onClick={handleToggleRatings}
-                                className="text-[#005180] font-semibold hover:underline mt-2"
-                              >
-                                {showMoreRatings ? "Show Less" : "Read more"}
-                              </button>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-1 text-gray-500">
-                            <MdVerified className="" /> {/* Verified icon */}
-                            <p className="text-sm font-semibold">
-                              Verified review
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Show More Reviews Button */}
-                  <div className="flex justify-center">
-                    <span className="mt-4 px-4 py-2 rounded-md border hover:bg-rose-50 transition duration-500 cursor-pointer font-semibold">
-                      Show more reviews
-                    </span>
-                  </div>
-                </div> */}
+               
 
                 <div className="space-y-2 my-4 bg-white rounded-md shadow-md">
                   <div>
@@ -819,13 +726,7 @@ const Agency = () => {
                           <h2 className="text-xl font-semibold">
                             Contact {agency?.name}
                           </h2>
-                          <div className="flex items-center text-yellow-500">
-                            <AiFillStar />
-                            <b className="font-medium">5.0</b>
-                            <span className="ml-1 text-black">
-                              (59 reviews)
-                            </span>
-                          </div>
+                          
                         </div>
                       </div>
 
@@ -919,11 +820,7 @@ const Agency = () => {
                     <h2 className="text-xl font-bold text-gray-800">
                       {agency?.name}
                     </h2>
-                    <div className="flex items-center space-x-1 text-yellow-500 mt-2">
-                      <FaStar />
-                      <span className="font-semibold text-gray-800">5.0</span>
-                      <span className="text-gray-600">(59 reviews)</span>
-                    </div>
+                   
                   </div>
 
                   {/* Action Buttons */}

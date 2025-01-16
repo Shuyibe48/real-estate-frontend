@@ -126,7 +126,7 @@ const SingleListing = () => {
       setTotalReviews(total);
       setAverageRating(avgRating.toFixed(1)); // Limiting to one decimal point
     }
-  }, [property]);
+  }, [property, filteredProduct]);
 
   const reviewsToShow = showAllReviews
     ? filteredProduct
@@ -146,6 +146,7 @@ const SingleListing = () => {
   const myReview = filteredProduct?.filter(
     (product) => product?.id === user?.id
   );
+
 
   return (
     <div>
@@ -389,10 +390,10 @@ const SingleListing = () => {
                   alt="Agency"
                   className="w-24 h-24 rounded-full mx-auto mb-4"
                 />
-                <div className="flex items-center justify-center text-yellow-500">
+                {/* <div className="flex items-center justify-center text-yellow-500">
                   <FaStar />
                   <span className="ml-2">5.0 (59 reviews)</span>
-                </div>
+                </div> */}
                 <p className="text-gray-500 mt-2">
                   {property?.agencyId?.address}
                 </p>

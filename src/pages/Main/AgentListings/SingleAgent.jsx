@@ -1,6 +1,16 @@
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import Container from "../../../components/Shared/Container";
-import { Bath, Bed, CircleAlert, CookingPotIcon } from "lucide-react";
+import {
+  Bath,
+  Bed,
+  Briefcase,
+  CircleAlert,
+  CogIcon,
+  CookingPotIcon,
+  Edit,
+  MenuSquare,
+  X,
+} from "lucide-react";
 import { BiEnvelope } from "react-icons/bi";
 import { AiFillStar } from "react-icons/ai";
 import { MdVerified } from "react-icons/md";
@@ -11,12 +21,15 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import baseUrl from "../../../api/baseUrl";
 // import PromotedList from "../Listings/PromotedLIst";
 import { formatDistanceToNow } from "date-fns";
+import EditAgentModal from "../../../components/Modal/EditAgentModal";
 
 const SingleAgent = () => {
   const [selectedOption, setSelectedOption] = useState("");
   const agent = useLoaderData();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpenOption, setIsMenuOpenOption] = useState(false);
 
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [visibleCount, setVisibleCount] = useState(6);
@@ -127,15 +140,18 @@ const SingleAgent = () => {
 
   const handleReportSubmit = async () => {
     try {
-      const res = await baseUrl.post(`/complains/create-complains/${agent?._id}`, {
-        complain: {
-          userId: user?._id,
-          id: user?.id,
-          toId: agent?.id,
-          name: user?.fullName,
-          complain: complain,
-        },
-      });
+      const res = await baseUrl.post(
+        `/complains/create-complains/${agent?._id}`,
+        {
+          complain: {
+            userId: user?._id,
+            id: user?.id,
+            toId: agent?._id,
+            name: user?.fullName,
+            complain: complain,
+          },
+        }
+      );
 
       console.log(res);
 
@@ -191,10 +207,10 @@ const SingleAgent = () => {
     ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sorting by createdAt
 
   useEffect(() => {
-    if (filteredProduct.length > 0) {
-      const total = agent.reviews.length;
-      const sumRating = agent.reviews.reduce(
-        (sum, review) => sum + review.rating,
+    if (filteredProduct?.length > 0) {
+      const total = agent?.reviews?.length;
+      const sumRating = agent?.reviews?.reduce(
+        (sum, review) => sum + review?.rating,
         0
       );
       const avgRating = sumRating / total;
@@ -202,7 +218,7 @@ const SingleAgent = () => {
       setTotalReviews(total);
       setAverageRating(avgRating.toFixed(1)); // Limiting to one decimal point
     }
-  }, [agent]);
+  }, [agent, filteredProduct]);
 
   const reviewsToShow = showAllReviews
     ? filteredProduct
@@ -222,11 +238,21 @@ const SingleAgent = () => {
   const myReview = filteredProduct?.filter(
     (product) => product?.id === user?.id
   );
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  // Edit Modal Handler
+  const handleOpenEditModal = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+  };
 
   return (
     <div className="bg-[#F6F5F7]">
       <nav className="bg-[#37424B] font-semibold text-white py-4 text-center flex justify-between items-center px-4">
-        <span>{agent?.myAgency?.agent?.name}</span>
+        <span>{agent?.myAgency[0]?.agency?.name}</span>
         <span className="cursor-pointer" onClick={openReportModal}>
           <CircleAlert className="h-4 w-4 text-gray-300" />
         </span>
@@ -279,11 +305,11 @@ const SingleAgent = () => {
             <div>
               <h1 className="font-semibold text-xl">{agent?.fullName}</h1>
             </div>
-            {agent?.myAgency?.agent?.name && (
+            {agent?.myAgency[0]?.agency?.name && (
               <p>
                 Sales Consultant at{" "}
                 <Link className="underline">
-                  {agent?.myAgency?.agent?.name}
+                  {agent?.myAgency[0]?.agency?.name}
                 </Link>{" "}
               </p>
             )}
@@ -295,6 +321,60 @@ const SingleAgent = () => {
                   ({totalReviews} reviews)
                 </span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="hidden">
+          <div className="flex items-center">
+            <button className="hover:bg-rose-50 p-2 rounded-md transition duration-500">
+              <Edit onClick={() => handleOpenEditModal()} className="h-5 w-5" />
+            </button>
+            {/* Edit Modal */}
+            <EditAgentModal
+              isOpen={isEditModalOpen}
+              closeModal={handleCloseEditModal}
+              agentInfo={agent}
+              // refetch={refetch}
+            />
+            <div className="relative inline-block">
+              <button
+                onClick={() => setIsMenuOpenOption(!isMenuOpenOption)}
+                className="flex items-center p-2 hover:bg-rose-50 rounded-md transition duration-500"
+              >
+                {!isMenuOpenOption ? (
+                  <MenuSquare className="h-5 w-5" />
+                ) : (
+                  <X className="h-5 w-5" />
+                )}
+              </button>
+
+              {isMenuOpenOption && (
+                <div
+                  className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg overflow-hidden transition-all duration-300 ease-in-out transform origin-top-right"
+                  style={{
+                    opacity: isMenuOpenOption ? 1 : 0,
+                    transform: isMenuOpenOption ? "scaleY(1)" : "scaleY(0)",
+                  }}
+                >
+                  <div className="p-2 space-y-2">
+                    <Link
+                      to="/dashboard/agency"
+                      className="flex items-center p-2 text-gray-700 rounded hover:bg-rose-50 hover:text-rose-500 transition duration-300"
+                    >
+                      <Briefcase className="h-5 w-5 mr-2" />
+                      My Agency
+                    </Link>
+                    <Link
+                      to="/dashboard/my-lists"
+                      className="flex items-center p-2 text-gray-700 rounded hover:bg-rose-50 hover:text-rose-500 transition duration-300"
+                    >
+                      <CogIcon className="h-5 w-5 mr-2" />
+                      Manage List
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -498,13 +578,12 @@ const SingleAgent = () => {
                 <h1 className="font-semibold text-lg">
                   About {agent?.name?.firstName}
                 </h1>
-                <p>8 years experience</p>
               </div>
               <div className="py-4">
                 <p>
                   {showMore
-                    ? `With a lifelong dedication to this extraordinary community and extensive background of over 30 years in the retail industry, I bring an unmatched passions and determination to the process of selling your home. With a solid 7 years in the Real Estate industry, I find immense joy in every aspect of this dynamic field. Having successfully facilitated the sale of more than 500 properties, I take great pride in delivering exceptional customer service and ensuring the highest level of satisfaction for my clients. In addition to my professional endeavors, I am deeply committed to supporting and enriching the community through various initiatives. Whether it's volunteering my time or contributing to local projects, my goal is to make a positive and lasting impact. When you entrust me with your real estate needs, you can expect unparalleled results and a seamless experience. I am here to guide you with expertise, integrity, and a genuine dedication to your success. For a successful and stress-free real estate journey, please feel free to contact me. Your satisfaction is my ultimate priority, and I am here to assist you at every stage.`
-                    : `With a lifelong dedication to this extraordinary community and extensive background of over 30 years in the retail industry, I bring an unmatched passions and determination to the process of selling your home. With a solid 7 years in the Real Estate industry...`}
+                    ? agent?.description
+                    : `${agent?.description.slice(0, 150)}...`}
                 </p>
                 <button
                   onClick={handleToggle}
@@ -515,10 +594,15 @@ const SingleAgent = () => {
               </div>
               <div id="enquiry" className="flex justify-center">
                 <button className="flex mt-2 w-4/5 justify-center items-center gap-1 bg-rose-500 hover:bg-rose-700 text-white px-6 py-2 rounded-md transition duration-500 font-semibold">
-                  <span>
-                    <BiEnvelope />
-                  </span>
-                  Request a free appraisal
+                  <Link
+                    to={`/multi-step-form/${agent?.userId}`}
+                    className="flex items-center gap-1"
+                  >
+                    <span>
+                      <BiEnvelope />
+                    </span>
+                    Request a free market appraisal
+                  </Link>
                 </button>
               </div>
             </div>
@@ -729,7 +813,7 @@ const SingleAgent = () => {
               <div className="flex flex-col items-center gap-4 bg-white p-4 rounded-md">
                 {/* Primary Button */}
                 <Link
-                  to={`/multi-step-form/${agent?.userId?._id}`}
+                  to={`/multi-step-form/${agent?.userId}`}
                   className="flex items-center gap-2 bg-red-600 text-white py-3 px-6 rounded-md text-sm font-semibold hover:bg-red-700 shadow-md"
                 >
                   <FaEnvelope />
@@ -750,13 +834,6 @@ const SingleAgent = () => {
                     {agent?.contactNo}
                   </button>
                 </div>
-              </div>
-
-              <div className="mt-20">
-                <h1 className="font-semibold text-gray-500 mb-6">
-                  PROMOTED PROPERTIES
-                </h1>
-                {/* <PromotedList /> */}
               </div>
             </div>
           </div>

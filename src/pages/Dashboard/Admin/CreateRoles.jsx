@@ -38,9 +38,9 @@ const CreateRoles = () => {
         password: formData.password,
       });
 
-      setSuccessMessage("Admin created successfully!");
+      setSuccessMessage("Moderation created successfully!");
     } catch (error) {
-      setErrorMessage("Failed to create admin. Please try again.");
+      setErrorMessage("Failed to create Moderation. Please try again.");
     } finally {
       setLoading(false);
     }
