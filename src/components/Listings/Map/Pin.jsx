@@ -21,9 +21,11 @@ const Pin = ({ item }) => {
             <span className="text-gray-600 text-xs">
               {item?.bedrooms} bedrooms
             </span>
-            <b className="text-green-600 text-base">
-              $ {item?.price.toLocaleString()}
-            </b>
+            {item?.price && (
+              <b className="text-green-600 text-base">
+                $ {item?.price?.toLocaleString()}
+              </b>
+            )}
           </div>
         </div>
       </Popup>
