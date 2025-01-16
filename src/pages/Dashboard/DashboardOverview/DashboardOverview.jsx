@@ -16,6 +16,7 @@ import { format, parseISO } from "date-fns";
 import Container from "../../../components/Shared/Container";
 import { useEffect, useState } from "react";
 import baseUrl from "../../../api/baseUrl";
+import Loader from "../../../components/Shared/Loader";
 
 const DashboardOverview = () => {
   // Demo data for users, listings, and revenue
@@ -26,6 +27,7 @@ const DashboardOverview = () => {
   });
   const [listings, setListings] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Helper function to format dates and group by month-year
   const getMonthlyData = (data, key) => {
@@ -51,6 +53,7 @@ const DashboardOverview = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const agents = await baseUrl.get("/agents/get-agents");
       const buyers = await baseUrl.get("/buyers/get-buyers");
       const properties = await baseUrl.get("/properties/get-properties");
@@ -62,12 +65,12 @@ const DashboardOverview = () => {
       );
       setListings(properties?.data?.data);
       setRevenueData(totalCompletePayments);
-      console.log(buyers?.data?.data?.total);
       setUsers({
         owners: buyers?.data?.data?.length,
         agents: agents?.data?.data?.length,
         buyers: buyers?.data?.data?.total,
       });
+      setLoading(false);
     };
 
     fetchData();
@@ -119,6 +122,10 @@ const DashboardOverview = () => {
     : 0;
 
   const revenueByMonth = getMonthlyData(revenueData, "createdAt");
+
+  if (loading) {
+    return <Loader />; // Render Loader component while loading
+  }
 
   return (
     <div className="mt-6">
