@@ -146,17 +146,24 @@ const Seo = () => {
   }, []);
 
   const generateKeywords = (title, description) => {
+    console.log("Generating keywords for:", title, description);
     const text = title + " " + description;
-    const doc = compromise(text);
-    const terms = doc.terms().out('array');
-    const wordFrequency = wordfreq().process(terms.join(" ")).sort((a, b) => b[1] - a[1]);
-
-    const keywordList = wordFrequency
-      .filter(([word, freq]) => freq > 1)
-      .map(([word]) => word);
-
-    return Array.from(new Set(keywordList)).join(", ");
+    try {
+      const doc = compromise(text);
+      const terms = doc.terms().out('array');
+      const wordFrequency = wordfreq().process(terms.join(" ")).sort((a, b) => b[1] - a[1]);
+  
+      const keywordList = wordFrequency
+        .filter(([word, freq]) => freq > 1)
+        .map(([word]) => word);
+  
+      return Array.from(new Set(keywordList)).join(", ");
+    } catch (error) {
+      console.error("Error generating keywords:", error);
+      return "";
+    }
   };
+  
 
   if (loading) {
     return <Loader />; // Render Loader component while loading
