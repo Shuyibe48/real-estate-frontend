@@ -90,10 +90,10 @@ const ImageSlider = ({ images }) => {
           <span>{`1/${totalImages}`}</span>
         </div>
         <div className="border-l h-5 border-gray-400 mx-2"></div>
-        <div className="flex items-center space-x-1">
+        {/* <div className="flex items-center space-x-1">
           <BiVideo />
           <span>{videoCount}</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );
