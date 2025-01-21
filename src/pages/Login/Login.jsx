@@ -143,7 +143,7 @@ const Login = () => {
         </div>
 
         {/* Google Sign-In */}
-        <div
+        {/* <div
           onClick={handleGoogleSignIn}
           className="flex items-center justify-center gap-2 border py-2 w-full rounded-lg cursor-pointer hover:bg-gray-50 transition"
         >
@@ -151,7 +151,7 @@ const Login = () => {
           <span className="font-semibold text-gray-700">
             Continue with Google
           </span>
-        </div>
+        </div> */}
 
         <p className="text-center text-gray-500 mt-4 text-xs">
           Don't have an account yet?{" "}
