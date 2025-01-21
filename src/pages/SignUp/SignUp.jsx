@@ -264,7 +264,7 @@ const SignUp = () => {
           <span className="mx-4 text-gray-500">OR</span>
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
-{/* 
+        {/* 
         <button
           onClick={handleGoogleSignIn}
           className="w-full py-2 px-4 bg-white border border-gray-300 hover:bg-gray-50 flex items-center justify-center rounded-lg transition-all duration-200"
@@ -275,10 +275,7 @@ const SignUp = () => {
 
         <div className="text-center mt-6 text-gray-400 text-xs">
           By clicking Continue, you agree to the{" "}
-          <a href="/privacy-policy" className="text-red-600 font-semibold">
-            privacy policy
-          </a>
-          .
+          <p className="text-red-600 font-semibold">privacy policy</p>.
         </div>
       </div>
     </div>
