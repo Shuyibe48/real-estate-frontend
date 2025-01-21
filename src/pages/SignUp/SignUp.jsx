@@ -275,7 +275,7 @@ const SignUp = () => {
 
         <div className="text-center mt-6 text-gray-400 text-xs">
           By clicking Continue, you agree to the{" "}
-          <p className="text-red-600 font-semibold">privacy policy</p>.
+          <a className="text-red-600 font-semibold">privacy policy</a>.
         </div>
       </div>
     </div>
