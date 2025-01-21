@@ -63,20 +63,19 @@ const Footer = () => {
               India | Malaysia | Singapore | Thailand | United States | Vietnam
               | International properties
             </p>
-            <h4 className="text-gray-800 font-semibold mb-2">Partner sites</h4>
-            <p className="text-gray-600">
+            {/* <h4 className="text-gray-800 font-semibold mb-2">Partner sites</h4> */}
+            {/* <p className="text-gray-600">
               news.com.au | foxsports.com.au | homeguru.com.au | Mansion Global
               | askizzy.org.au | hipages.com.au | makaan.com | proptiger.com |
               thinkofliving.com
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
 
       {/* Copyright Section */}
       <div className="max-w-7xl mx-auto px-4 mt-8 border-t pt-8 text-center text-gray-500 text-sm">
-        realestate.com.au is owned and operated by ASX-listed REA Group Ltd
-        (REA:ASX) © REA Group Ltd.
+        immogroup.ro is owned and operated by © immogroup Ltd.
       </div>
     </footer>
   );
