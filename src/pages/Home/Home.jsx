@@ -11,8 +11,8 @@ const Home = () => {
       <Banner />
       <RecentSearches />
       <SuggestedProperties />
-      <InfoCard />
       <Services />
+      <InfoCard />
       <RealEstateComponent />
     </>
   );

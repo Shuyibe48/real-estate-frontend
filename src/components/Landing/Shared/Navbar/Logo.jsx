@@ -25,7 +25,7 @@ const Logo = () => {
 
   return (
     <Link to="/">
-      <img src={logo || logoImage} alt="logo" width={100} height={100} />
+      <img src={logo || logoImage} alt="logo" width={95} height={95} />
     </Link>
   );
 };

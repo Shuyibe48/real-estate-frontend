@@ -45,8 +45,8 @@ const Promotion = () => {
   }
 
   return (
-    <div>
-      <h1 className="font-semibold text-gray-500 mb-6">PROMOTED PROPERTIES</h1>
+    <div className="px-4">
+      <h1 className="font-semibold text-xs text-gray-500 mb-6">PROMOTED PROPERTIES</h1>
       <Slider {...settings}>
         {list?.map((property) => (
           <Link

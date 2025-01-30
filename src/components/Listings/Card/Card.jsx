@@ -1,9 +1,22 @@
-import { Bath, Bed, Car, CookingPotIcon, Square, Star } from "lucide-react";
+import {
+  Bath,
+  Bed,
+  Car,
+  ChevronLeft,
+  ChevronRight,
+  CookingPotIcon,
+  Square,
+  Star,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import baseUrl from "../../../api/baseUrl";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { FaRegStar, FaStar } from "react-icons/fa6";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Card = ({ items }) => {
   const { user, setUser } = useContext(AuthContext);
@@ -104,6 +117,36 @@ const Card = ({ items }) => {
     await baseUrl.patch(`/properties/update-property-views/${id}`);
   };
 
+  const PreviousArrow = ({ onClick }) => (
+    <button
+      onClick={onClick}
+      className="absolute left-2 top-1/2 transform -translate-y-1/2 p-2 text-white z-10"
+    >
+      <ChevronLeft className="w-10 h-10" />
+    </button>
+  );
+
+  // Custom Next Button
+  const NextArrow = ({ onClick }) => (
+    <button
+      onClick={onClick}
+      className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 text-white z-10"
+    >
+      <ChevronRight className="w-10 h-10" />
+    </button>
+  );
+
+  const settings = {
+    dots: false, // ডট বাটন বন্ধ
+    infinite: true, // লুপ চালানোর জন্য
+    speed: 500, // অ্যানিমেশন স্পিড
+    slidesToShow: 1, // একবারে একটি ইমেজ দেখাবে
+    slidesToScroll: 1, // একবারে একটি করে স্ক্রল করবে
+    nextArrow: <NextArrow />, // কাস্টম পরবর্তী বাটন
+    prevArrow: <PreviousArrow />, // কাস্টম পূর্ববর্তী বাটন
+    autoplay: false, // অটোপ্লে বন্ধ
+  };
+
   return (
     <Link
       ref={linkRef}
@@ -112,16 +155,16 @@ const Card = ({ items }) => {
     >
       {/* <Link> */}
       <div className="border rounded-lg bg-white shadow-md">
-        <div className="relative py-4 ps-2 pr-24 bg-rose-500 rounded-t-lg">
+        <div className="relative py-2 ps-2 pr-24 bg-[#11828D] rounded-t-lg">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-xl font-semibold text-white">
               {agencyId.name}
             </h2>
             <h5 className="font-semibold text-white">
               {uploaderAgentId.fullName}
             </h5>
           </div>
-          <div className="absolute top-2 right-4">
+          <div className="absolute top-2 right-4 z-50">
             <img
               className="h-[80px] w-[80px] rounded-full"
               src={uploaderAgentId.profileImage}
@@ -129,10 +172,20 @@ const Card = ({ items }) => {
             />
           </div>
         </div>
-        <div>
-          <img className="w-full h-[400px]" src={images[0]} alt="" />
+        <div className="relative w-full h-[350px]">
+          <Slider {...settings}>
+            {images?.map((image, index) => (
+              <div key={index}>
+                <img
+                  className="w-full h-[350px] object-cover"
+                  src={image}
+                  alt={`Slide ${index}`}
+                />
+              </div>
+            ))}
+          </Slider>
         </div>
-        <div className="p-6">
+        <div className="p-4">
           {!save ? (
             <div className="flex justify-between items-center">
               <h1 className="text-lg font-semibold">{title}</h1>
@@ -154,10 +207,10 @@ const Card = ({ items }) => {
               </span>
             </div>
           )}
-          <div className="mt-4">
+          <div className="mt-2">
             <p>{address}</p>
           </div>
-          <div className="flex items-center gap-4 my-2">
+          <div className="flex items-center gap-4 my-1">
             <span className="flex justify-center items-center gap-2">
               <Bed className="h-4 w-4" />
               <span>{bedrooms}</span>

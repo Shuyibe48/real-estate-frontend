@@ -10,7 +10,7 @@ const Navbar = () => {
   const { foldMenu, user } = useContext(AuthContext);
   return (
     <div className="w-full bg-white z-10">
-      <div className="py-4">
+      <div className="pt-4 pb-4">
         <Container>
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
             <FoldMenu />

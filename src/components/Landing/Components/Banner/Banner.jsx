@@ -23,9 +23,12 @@ const Banner = () => {
     <div>
       <Container>
         <div
-          className="flex justify-center items-center bg-cover bg-center rounded-md h-96 w-full"
+          className="flex justify-center items-center bg-cover bg-center rounded-xl h-[305px] w-full"
           style={{
             backgroundImage: `url(${logo || "default-placeholder.jpg"})`,
+            backgroundSize: "cover", 
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
           }}
         >
           <FilterBox />

@@ -137,11 +137,11 @@ const Listings = () => {
   };
 
   return (
-    <div className="bg-[#F6F5F7] pb-12">
+    <div className="bg-[#F6F5F7] pb-12 px-14">
       <Container>
-        <div className="grid grid-cols-12 gap-10">
+        <div className="grid grid-cols-12 gap-16">
           <div className="col-span-8">
-            <div className="bg-white px-4 rounded-md shadow-md flex justify-between items-center gap-6 border-t border-b py-2 mb-4 mt-2">
+            <div className="flex justify-between items-center gap-6 border-t border-b py-2 mb-4 mt-2">
               <div
                 onClick={() => setToggle(false)}
                 className="flex justify-center items-center gap-2 cursor-pointer"
@@ -168,7 +168,7 @@ const Listings = () => {
                   <Search className="h-4 w-4 text-gray-500" />
                 </span>
                 <input
-                  className="border-none outline-none pl-8 pr-2 py-3 w-full rounded-md hover:bg-rose-50 transition duration-500"
+                  className="border-none outline-none pl-8 pr-2 py-3 w-full rounded-md hover:bg-rose-50 transition bg-transparent duration-500"
                   type="text"
                   name="location"
                   value={""}

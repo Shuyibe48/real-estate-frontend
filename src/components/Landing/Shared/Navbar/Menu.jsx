@@ -10,33 +10,33 @@ const Menu = () => {
         <Link
          onClick={() => setQuery({ ...query, type: "Buy" })}
           to="/"
-          className="hover:bg-rose-50 py-3 px-2 rounded-md transition duration-500"
+          className="hover:bg-rose-50 py-2 px-2 rounded-md transition duration-500"
         >
           <li>Buy</li>
         </Link>
         <Link
           onClick={() => setQuery({ ...query, type: "Rent" })}
           to="/"
-          className="hover:bg-rose-50 py-3 px-2 rounded-md transition duration-500"
+          className="hover:bg-rose-50 py-2 px-2 rounded-md transition duration-500"
         >
           <li>Rent</li>
         </Link>
         <Link
          onClick={() => setQuery({ ...query, type: "Sold" })}
           to="/"
-          className="hover:bg-rose-50 py-3 px-2 rounded-md transition duration-500"
+          className="hover:bg-rose-50 py-2 px-2 rounded-md transition duration-500"
         >
           <li>Sold</li>
         </Link>
         <Link
           to="/developer"
-          className="hover:bg-rose-50 py-3 px-2 rounded-md transition duration-500"
+          className="hover:bg-rose-50 py-2 px-2 rounded-md transition duration-500"
         >
           <li>Find Developer</li>
         </Link>
         <Link
           to="/blog"
-          className="hover:bg-rose-50 py-3 px-2 rounded-md transition duration-500"
+          className="hover:bg-rose-50 py-2 px-2 rounded-md transition duration-500"
         >
           <li>Blog</li>
         </Link>

@@ -62,7 +62,7 @@ const MenuDropdown = () => {
           <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="hover:bg-gray-100 py-2 px-3 rounded-md transition duration-300"
+              className="hover:bg-gray-100 px-3 py-[7px] rounded-md transition duration-300"
             >
               Sign in
             </Link>

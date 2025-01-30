@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineStar, AiFillStar } from "react-icons/ai";
 import Container from "../../../Shared/Container";
+import { Search } from "lucide-react";
+import { AuthContext } from "../../../../providers/AuthProvider";
+import baseUrl from "../../../../api/baseUrl";
+import { useNavigate } from "react-router-dom";
 
 const RecentSearches = () => {
+  const { user, setSearchContent } = useContext(AuthContext);
   const [saved, setSaved] = useState([]);
+  const navigate = useNavigate();
 
   const handleSave = (index) => {
     if (!saved.includes(index)) {
@@ -15,49 +21,66 @@ const RecentSearches = () => {
     }
   };
 
-  const searches = [
-    { location: "Vaucluse, NSW 2030", type: "Buy" },
-    { location: "Brisbane City, QLD 4000", type: "Buy" },
-    { location: "Perth - CBD and Inner Suburbs", type: "Buy" },
-  ];
+  const [searches, setSearches] = useState([]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await baseUrl.get(`/users/get-user/${user?.userId?._id}`);
+        const reversedSearchHistory = res?.data?.data[0]?.searchHistory
+          ?.slice(-3)
+          .reverse(); // রিভার্স করা ডেটা
+        setSearches(reversedSearchHistory || []); // ডেটা রিভার্স করে সেট করুন
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    getUser();
+  }, [user]);
+
+  const handleSearchClick = async (type, text) => {
+    console.log(type, text);
+    const res = await baseUrl.post(
+      `/users/save-search-history/${user?.userId?._id}`,
+      { type: type, searchText: text }
+    );
+
+    setSearchContent({ type: type, searchText: text });
+    localStorage.setItem(
+      "query",
+      JSON.stringify({ type: type, searchText: text })
+    );
+    navigate("/listings");
+  };
 
   return (
     <div className="mt-10 mb-6">
       <Container>
         <div>
-          <h2 className="text-lg font-semibold mb-4">Recent searches</h2>
+          <h2 className="text-xl font-semibold mb-4">Recent searches</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {searches.map((search, index) => (
+            {searches?.map((search) => (
               <div
-                key={index}
-                className="flex items-center justify-between bg-white border rounded-lg shadow-md p-4 w-full"
+                onClick={() =>
+                  handleSearchClick(search?.type, search?.searchText)
+                }
+                key={search?._id}
+                className="flex cursor-pointer items-center justify-between bg-white border rounded-lg p-4 w-full"
               >
                 <div className="flex items-center">
                   <div className="bg-gray-100 p-2 rounded-full">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6 text-gray-600"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1112.9 7.6a7.5 7.5 0 014.5 8.9z"
-                      />
-                    </svg>
+                    <Search className="w-4 h-4" />
                   </div>
                   <div className="ml-4">
                     <p className="font-medium text-gray-900">
-                      {search.location}
+                      {search?.searchText}
                     </p>
-                    <p className="text-sm text-gray-500">{search.type}</p>
+                    <p className="text-sm text-gray-500">{search?.type}</p>
                   </div>
                 </div>
-                <button onClick={() => handleSave(index)}>
-                  {saved.includes(index) ? (
+                <button onClick={() => handleSave(search?._id)}>
+                  {saved.includes(search?._id) ? (
                     <AiFillStar className="w-6 h-6 text-yellow-500" />
                   ) : (
                     <AiOutlineStar className="w-6 h-6 text-gray-600" />

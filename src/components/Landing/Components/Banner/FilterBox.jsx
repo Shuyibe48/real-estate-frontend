@@ -3,11 +3,12 @@ import { Search, SlidersHorizontal } from "lucide-react";
 import FilterModal from "../../../Modal/FilterModal";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../../providers/AuthProvider";
+import baseUrl from "../../../../api/baseUrl";
 
 const types = ["Buy", "Rent", "Sold", "Agents"];
 
 const FilterBox = () => {
-  const { searchContent, setSearchContent, query, setQuery } =
+  const { searchContent, setSearchContent, query, setQuery, user } =
     useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const FilterBox = () => {
     setQuery((prev) => ({ ...prev, searchText: value }));
   };
 
-  const handleSearchClick = (e) => {
+  const handleSearchClick = async (e) => {
     e.preventDefault();
 
     if (!query.searchText) {
@@ -46,6 +47,13 @@ const FilterBox = () => {
       return;
     }
 
+    const res = await baseUrl.post(
+      `/users/save-search-history/${user?.userId?._id}`,
+      { type: query.type, searchText: query.searchText }
+    );
+
+    console.log(res?.data?.data);
+
     setSearchContent({ type: query.type, searchText: query.searchText });
     localStorage.setItem(
       "query",
@@ -55,7 +63,7 @@ const FilterBox = () => {
   };
 
   return (
-    <div className="bg-[#000433] w-[70%] p-4 rounded-md">
+    <div className="bg-[#000433] w-[66%] p-3 rounded-xl">
       <div className="mb-4 flex flex-row items-center overflow-x-auto">
         {types.map((type) => (
           <button
@@ -77,7 +85,7 @@ const FilterBox = () => {
             <Search className="h-4 w-4 text-gray-500" />
           </span>
           <input
-            className="border-none outline-none pl-8 pr-2 py-3 w-full rounded-md hover:bg-rose-50 transition duration-500"
+            className="border-none outline-none pl-8 pr-2 py-2 w-full rounded-md hover:bg-rose-50 transition duration-500"
             type="text"
             name="location"
             placeholder="Search suburb, postcode or state"
@@ -92,9 +100,9 @@ const FilterBox = () => {
             d
             className={`${
               query.type === "Agents" ? "hidden" : ""
-            } flex justify-between items-center gap-1 border text-white border-rose-500 hover:bg-rose-50 hover:text-black px-6 py-2 rounded-full transition duration-500 font-semibold`}
+            } flex justify-between items-center gap-1 border text-white border-rose-500 hover:bg-rose-50 hover:text-black px-5 py-2 rounded-full transition duration-500 font-semibold`}
           >
-            <SlidersHorizontal className="h-4 w-4" />
+            <SlidersHorizontal className="h-3 w-3" />
             <span>Filter</span>
           </button>
 
@@ -105,7 +113,7 @@ const FilterBox = () => {
           <button
             type="button"
             onClick={handleSearchClick} // সার্চ বাটনে ক্লিক হলে কনসোল হবে
-            className="bg-rose-500 hover:bg-rose-700 text-white px-6 py-2 rounded-full transition duration-500 font-semibold"
+            className="bg-rose-500 hover:bg-rose-700 text-white px-5 py-2 rounded-full transition duration-500 font-semibold"
           >
             Search
           </button>
