@@ -59,7 +59,11 @@ const FilterBox = () => {
       "query",
       JSON.stringify({ type: query?.type, searchText: query?.searchText })
     );
-    navigate("/listings");
+    if(user){
+      navigate("/listings");
+    }else{
+      navigate("/login")
+    }
   };
 
   return (
