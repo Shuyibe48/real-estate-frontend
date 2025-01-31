@@ -21,31 +21,33 @@ const Footer = () => {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex flex-wrap justify-center gap-4 text-gray-600 text-sm">
-          <a href="#" className="hover:underline">
-            Advertise with us
-          </a>
-          <a href="#" className="hover:underline">
-            Contact us
-          </a>
-          <a href="#" className="hover:underline">
-            Agent admin
-          </a>
-          <a href="#" className="hover:underline">
-            Media sales
-          </a>
-          <a href="#" className="hover:underline">
-            Legal
-          </a>
-          <a href="#" className="hover:underline">
-            Privacy settings
-          </a>
-          <a href="#" className="hover:underline">
-            Site map
-          </a>
-          <a href="#" className="hover:underline">
-            Careers
-          </a>
+        <div className="hidden">
+          <div className="flex flex-wrap justify-center gap-4 text-gray-600 text-sm">
+            <a href="#" className="hover:underline">
+              Advertise with us
+            </a>
+            <a href="#" className="hover:underline">
+              Contact us
+            </a>
+            <a href="#" className="hover:underline">
+              Agent admin
+            </a>
+            <a href="#" className="hover:underline">
+              Media sales
+            </a>
+            <a href="#" className="hover:underline">
+              Legal
+            </a>
+            <a href="#" className="hover:underline">
+              Privacy settings
+            </a>
+            <a href="#" className="hover:underline">
+              Site map
+            </a>
+            <a href="#" className="hover:underline">
+              Careers
+            </a>
+          </div>
         </div>
       </div>
 
