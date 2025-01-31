@@ -47,12 +47,12 @@ const FilterBox = () => {
       return;
     }
 
-    const res = await baseUrl.post(
-      `/users/save-search-history/${user?.userId?._id}`,
-      { type: query.type, searchText: query.searchText }
-    );
-
-    // console.log(res?.data?.data);
+    if (user) {
+      await baseUrl.post(`/users/save-search-history/${user?.userId?._id}`, {
+        type: query.type,
+        searchText: query.searchText,
+      });
+    }
 
     setSearchContent({ type: query.type, searchText: query.searchText });
     localStorage.setItem(
