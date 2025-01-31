@@ -1,69 +1,166 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../../../providers/AuthProvider";
+import { Link, useNavigate } from "react-router-dom";
 
 const RealEstateComponent = () => {
   const [activeTab, setActiveTab] = useState("Real estate");
+  const { setSearchContent } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const tabs = ["Real estate", "New homes", "Popular areas", "Popular searches"];
+  const tabs = [
+    "Real estate",
+    "New homes",
+    "Popular areas",
+    "Popular searches",
+  ];
+
+  const handleSearchClick = (type, text) => {
+    // console.log(type, text);
+    setSearchContent({ type: type, searchText: text });
+    localStorage.setItem(
+      "query",
+      JSON.stringify({ type: type, searchText: text })
+    );
+    navigate("/listings");
+  };
 
   const renderContent = () => {
     switch (activeTab) {
       case "Real estate":
         return (
           <div>
-            <h2 className="font-bold mb-2">Real estate in Australia</h2>
+            <h2 className="font-bold mb-2">Real estate in Germany</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-              <li><Link to="#" className="text-gray-700 hover:underline">Real estate NSW</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Real estate WA</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Real estate ACT</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Real estate Melbourne</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Real estate Adelaide</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Real estate Darwin</Link></li>
+              <li onClick={() => handleSearchClick("Buy", "Berlin")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Real estate Berlin
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "munich")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Real estate Munich
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "hamburg")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Real estate Hamburg
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "frankfurt")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Real estate Frankfurt
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "stuttgart")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Real estate Stuttgart
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "dusseldorf")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Real estate Düsseldorf
+                </p>
+              </li>
             </ul>
           </div>
         );
       case "New homes":
         return (
           <div>
-            <h2 className="font-bold mb-2">Build new homes in Australia</h2>
+            <h2 className="font-bold mb-2">Build new homes in Germany</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-              <li><Link to="#" className="text-gray-700 hover:underline">Home builders</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">House and land</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Home builders Perth</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Home builders Adelaide</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">House and land packages Sydney</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">House and land packages Canberra</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">House designs</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Land estates</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Home builders Sydney</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">House and land packages Melbourne</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">House and land packages Brisbane</Link></li>
+              <Link to="/developer">
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Home builders Berlin
+                </p>
+              </Link>
+              <Link to="/developer">
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  House and land Hamburg
+                </p>
+              </Link>
+              <Link to="/developer">
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  House and land packages Munich
+                </p>
+              </Link>
+              <Link to="/developer">
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Home builders Frankfurt
+                </p>
+              </Link>
+              <Link to="/developer">
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Land estates Stuttgart
+                </p>
+              </Link>
+              <Link to="/developer">
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  House designs Düsseldorf
+                </p>
+              </Link>
             </ul>
           </div>
         );
       case "Popular areas":
         return (
           <div>
-            <h2 className="font-bold mb-2">Browse popular areas in Australia</h2>
+            <h2 className="font-bold mb-2">Browse popular areas in Germany</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-              <li><Link to="#" className="text-gray-700 hover:underline">Sydney house prices</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Brisbane house prices</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Canberra house prices</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Perth house prices</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Adelaide house prices</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Melbourne house prices</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Hobart house prices</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Suburb profiles</Link></li>
+              <li onClick={() => handleSearchClick("Buy", "berlin")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Berlin house prices
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "munich")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Munich house prices
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "hamburg")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Hamburg house prices
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "frankfurt")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Frankfurt house prices
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "a")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Stuttgart house prices
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "dusseldorf")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Düsseldorf house prices
+                </p>
+              </li>
+             
             </ul>
           </div>
         );
       case "Popular searches":
         return (
           <div>
-            <h2 className="font-bold mb-2">Popular searches in Australia</h2>
+            <h2 className="font-bold mb-2">Popular searches in Germany</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-              <li><Link to="#" className="text-gray-700 hover:underline">Popular real estate searches</Link></li>
-              <li><Link to="#" className="text-gray-700 hover:underline">Top areas to live</Link></li>
+              <li onClick={() => handleSearchClick("Buy", "berlin")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Top areas to live in Berlin
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "munich")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Top areas to live in Munich
+                </p>
+              </li>
+              <li onClick={() => handleSearchClick("Buy", "a")}>
+                <p className="text-gray-700 hover:underline cursor-pointer">
+                  Popular real estate searches Germany
+                </p>
+              </li>
             </ul>
           </div>
         );
@@ -81,7 +178,9 @@ const RealEstateComponent = () => {
             <button
               key={tab}
               className={`pb-2 px-4 text-sm font-semibold ${
-                activeTab === tab ? "border-b-2 border-red-500 text-red-500" : "text-gray-500"
+                activeTab === tab
+                  ? "border-b-2 border-red-500 text-red-500"
+                  : "text-gray-500"
               }`}
               onClick={() => setActiveTab(tab)}
             >

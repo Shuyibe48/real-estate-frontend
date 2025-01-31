@@ -23,22 +23,25 @@ const SingleBlog = () => {
   return (
     <div>
       <Container>
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-semibold">{blog?.title}</h1>
-            <p className="text-gray-400">
-              {new Date(blog?.createdAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          </div>
+        <div className="grid grid-cols-12 gap-16">
+          <div className="flex flex-col gap-4 col-span-8">
+            <div className="flex items-center gap-4">
+              <h1 className="text-2xl font-semibold">{blog?.title}</h1>
+              <p className="text-gray-400">
+                {new Date(blog?.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </p>
+            </div>
 
-          <div>
-            <img className="h-[400px] w-screen" src={blog?.image} alt="" />
+            <div>
+              <img className="h-[400px] w-screen" src={blog?.image} alt="" />
+            </div>
+            <p>{blog?.description}</p>
           </div>
-          <p>{blog?.description}</p>
+          <div className="col-span-8"></div>
         </div>
       </Container>
     </div>

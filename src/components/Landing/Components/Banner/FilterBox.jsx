@@ -52,7 +52,7 @@ const FilterBox = () => {
       { type: query.type, searchText: query.searchText }
     );
 
-    console.log(res?.data?.data);
+    // console.log(res?.data?.data);
 
     setSearchContent({ type: query.type, searchText: query.searchText });
     localStorage.setItem(
